@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "Projectile.h"
 
 class ofApp : public ofBaseApp{
 
@@ -20,5 +21,12 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		
+
+private:
+	const int alienRow{ 5 };
+	const int alienColumn{ 11 };
+
+	Coordinate heroCoordinate{ static_cast<double>(ofGetWidth() / 2), 600.0 };
+	Projectile heroProjectile{ heroCoordinate, Projectile::Type::friendly };
+	const int projectileSpeed = 10;
 };
