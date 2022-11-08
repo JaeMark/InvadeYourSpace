@@ -25,8 +25,10 @@ class ofApp : public ofBaseApp{
 private:
 	const int alienRow{ 5 };
 	const int alienColumn{ 11 };
+	const int leftBoundary = 100;
+	const int rightBoundary = ofGetWidth() - 100;
 
 	Coordinate heroCoordinate{ static_cast<double>(ofGetWidth() / 2), 600.0 };
+	const int heroMovementSpeed = 10;
 	std::vector<Projectile> heroProjectiles;
-	const int projectileSpeed = 10;
 };
