@@ -31,4 +31,6 @@ private:
 	Coordinate heroCoordinate{ static_cast<double>(ofGetWidth() / 2), 600.0 };
 	const int heroMovementSpeed = 10;
 	std::vector<Projectile> heroProjectiles;
+
+	void checkBoundary();
 };

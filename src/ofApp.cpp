@@ -10,7 +10,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+	checkBoundary();
 }
 
 //--------------------------------------------------------------
@@ -32,13 +32,6 @@ void ofApp::keyPressed(int key){
 	if (key == 'w') {
 		heroProjectiles.push_back(Projectile{ heroCoordinate, Projectile::Type::friendly });
 	}
-
-	if (heroCoordinate.x < leftBoundary) {
-		heroCoordinate.x = leftBoundary;
-	}
-	if (heroCoordinate.x > rightBoundary) {
-		heroCoordinate.x = rightBoundary;
-	}
 }
 
 //--------------------------------------------------------------
@@ -48,7 +41,16 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
+	heroCoordinate.x = x;
 
+	/* Movement speed based movement
+	if (x < heroCoordinate.x) {
+		heroCoordinate.x -= heroMovementSpeed;
+	}
+	if (x > heroCoordinate.x) {
+		heroCoordinate.x += heroMovementSpeed;
+	}
+	*/
 }
 
 //--------------------------------------------------------------
@@ -58,7 +60,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-
+	heroProjectiles.push_back(Projectile{ heroCoordinate, Projectile::Type::friendly });
 }
 
 //--------------------------------------------------------------
@@ -89,4 +91,13 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
+}
+
+void ofApp::checkBoundary() {
+	if (heroCoordinate.x < leftBoundary) {
+		heroCoordinate.x = leftBoundary;
+	}
+	if (heroCoordinate.x > rightBoundary) {
+		heroCoordinate.x = rightBoundary;
+	}
 }
