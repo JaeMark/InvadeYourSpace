@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Alien.h"
 #include "ofMain.h"
 #include "Projectile.h"
 
@@ -32,5 +33,8 @@ private:
 	const int heroMovementSpeed = 10;
 	std::vector<Projectile> heroProjectiles;
 
+	std::vector<Alien> aliens;
+
 	void checkBoundary();
+	void destroyAlien(Alien alien);
 };

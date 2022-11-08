@@ -6,18 +6,32 @@
 void ofApp::setup(){
 	//ofSetWindowShape(750, 550);
 	ofSetRectMode(OF_RECTMODE_CENTER);
+
+	aliens.push_back(Alien{ Coordinate{512, 200}, Alien::Type::top });
+
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 	checkBoundary();
+
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() {
+	ofSetColor(255);
 	ofDrawRectangle(heroCoordinate.x, heroCoordinate.y, 20, 10);
 	for (auto& heroProjectile : heroProjectiles) {
 		heroProjectile.draw();
+	}
+	for (auto& alien : aliens) {
+		alien.draw();
+		for (auto& heroProjectile : heroProjectiles) {
+			if(heroProjectile.collision.intersects(alien.collision)) {
+				aliens.pop_back();
+				heroProjectiles.pop_back();
+			}
+		}
 	}
 }
 
@@ -100,4 +114,7 @@ void ofApp::checkBoundary() {
 	if (heroCoordinate.x > rightBoundary) {
 		heroCoordinate.x = rightBoundary;
 	}
+}
+
+void ofApp::destroyAlien(Alien alien) {
 }
