@@ -7,13 +7,26 @@ void ofApp::setup(){
 	//ofSetWindowShape(750, 550);
 	ofSetRectMode(OF_RECTMODE_CENTER);
 
+	// create alien matrix
 	double alienPosX = 0;
 	double alienPosY = 0;
+	double gridInitialPosX = ofGetWidth()/2 - gridSize*alienRow;
+	double gridInitialPosY = 100;
+	Alien::Type alienType;
 	for (int n{ 0 }; n < alienRow; n++) {
-		alienPosY = 100 * n;
+		alienPosY = gridSize*n + gridInitialPosY;
+		// determine alien type
+		if (n == 0) {
+			alienType = Alien::Type::top;
+		} else if (n == 1 || n == 2) {
+			alienType = Alien::Type::middle;
+		}
+		else if (n == 3 || n == 4) {
+			alienType = Alien::Type::bottom;
+		}
 		for (int m{ 0 }; m < alienColumn; m++) {
-			alienPosX = 50 * m;
-			aliens.push_back(Alien{ Coordinate{alienPosX, alienPosY}, Alien::Type::top });
+			alienPosX = gridSize*m + gridInitialPosX;
+			aliens.push_back(Alien{ Coordinate{alienPosX, alienPosY}, alienType });
 		}
 	}
 }

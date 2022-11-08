@@ -34,6 +34,7 @@ private:
 
 	const int alienRow{ 5 };
 	const int alienColumn{ 11 };
+	const int gridSize = 50;
 	std::vector<Alien> aliens;
 
 	void checkBoundary();

@@ -21,12 +21,15 @@ public:
 		case Type::bottom:
 			ofSetColor(255, 0, 0);
 			ofDrawCircle(myCoordinate.x, myCoordinate.y, 10);
+			break;
 		case Type::middle:
 			ofSetColor(0, 255, 0);
 			ofDrawCircle(myCoordinate.x, myCoordinate.y, 10);
+			break;
 		case Type::top:
 			ofSetColor(0, 0, 255);
 			ofDrawCircle(myCoordinate.x, myCoordinate.y, 10);
+			break;
 		}
 	}
 
