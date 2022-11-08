@@ -24,8 +24,6 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 
 private:
-	const int alienRow{ 5 };
-	const int alienColumn{ 11 };
 	const int leftBoundary = 100;
 	const int rightBoundary = ofGetWidth() - 100;
 
@@ -33,8 +31,11 @@ private:
 	const int heroMovementSpeed = 10;
 	std::vector<Projectile> heroProjectiles;
 
+
+	const int alienRow{ 5 };
+	const int alienColumn{ 11 };
 	std::vector<Alien> aliens;
 
 	void checkBoundary();
-	void destroyAlien(Alien alien);
+	void checkCollisions();
 };

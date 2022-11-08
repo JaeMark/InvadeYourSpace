@@ -7,13 +7,21 @@ void ofApp::setup(){
 	//ofSetWindowShape(750, 550);
 	ofSetRectMode(OF_RECTMODE_CENTER);
 
-	aliens.push_back(Alien{ Coordinate{512, 200}, Alien::Type::top });
-
+	double alienPosX = 0;
+	double alienPosY = 0;
+	for (int n{ 0 }; n < alienRow; n++) {
+		alienPosY = 100 * n;
+		for (int m{ 0 }; m < alienColumn; m++) {
+			alienPosX = 50 * m;
+			aliens.push_back(Alien{ Coordinate{alienPosX, alienPosY}, Alien::Type::top });
+		}
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 	checkBoundary();
+	checkCollisions();
 
 }
 
@@ -26,12 +34,7 @@ void ofApp::draw() {
 	}
 	for (auto& alien : aliens) {
 		alien.draw();
-		for (auto& heroProjectile : heroProjectiles) {
-			if(heroProjectile.collision.intersects(alien.collision)) {
-				aliens.pop_back();
-				heroProjectiles.pop_back();
-			}
-		}
+
 	}
 }
 
@@ -116,5 +119,13 @@ void ofApp::checkBoundary() {
 	}
 }
 
-void ofApp::destroyAlien(Alien alien) {
+void ofApp::checkCollisions() {
+	for (int i{ 0 }; i < aliens.size(); i++) {
+		for (int j{ 0 }; j < heroProjectiles.size(); j++) {
+			if (heroProjectiles[j].collision.intersects(aliens[i].collision)) {
+				aliens.erase(aliens.begin() + i);
+				heroProjectiles.erase(heroProjectiles.begin() + j);
+			}
+		}
+	}
 }
