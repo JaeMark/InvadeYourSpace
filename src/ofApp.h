@@ -27,6 +27,6 @@ private:
 	const int alienColumn{ 11 };
 
 	Coordinate heroCoordinate{ static_cast<double>(ofGetWidth() / 2), 600.0 };
-	Projectile heroProjectile{ heroCoordinate, Projectile::Type::friendly };
+	std::vector<Projectile> heroProjectiles;
 	const int projectileSpeed = 10;
 };

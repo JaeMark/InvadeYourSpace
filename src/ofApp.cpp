@@ -5,7 +5,6 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	//ofSetWindowShape(750, 550);
-	
 
 }
 
@@ -15,13 +14,17 @@ void ofApp::update(){
 }
 
 //--------------------------------------------------------------
-void ofApp::draw(){
-	heroProjectile.draw();
+void ofApp::draw() {
+	for (auto& heroProjectile : heroProjectiles) {
+		heroProjectile.draw();
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+	if (key == 'w') {
+		heroProjectiles.push_back(Projectile{ heroCoordinate, Projectile::Type::friendly });
+	}
 }
 
 //--------------------------------------------------------------

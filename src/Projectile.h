@@ -12,7 +12,7 @@ private:
 public:
 	Projectile(const Coordinate& coordinate, const Type& type)
 		: myCoordinate{ coordinate }, myType{type} {
-		if (myType == Type::friendly) { mySpeed = 2; }
+		if (myType == Type::friendly) { mySpeed = 15; }
 		else if (myType == Type::enemy) { mySpeed = 1; }
 	}
 
@@ -20,6 +20,5 @@ public:
 		ofSetColor(255);
 		myCoordinate.y -= mySpeed;
 		ofDrawCircle(myCoordinate.x, myCoordinate.y, 5);
-		std::cout << myCoordinate.x << "\n";
 	}
 };
