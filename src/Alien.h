@@ -16,7 +16,7 @@ public:
 	}
 
 
-	void draw() {
+	void draw() const {
 		switch(myType) {
 		case Type::bottom:
 			ofSetColor(255, 0, 0);
@@ -31,6 +31,22 @@ public:
 			ofDrawCircle(myCoordinate.x, myCoordinate.y, 10);
 			break;
 		}
+	}
+
+	int value() const {
+		int alienValue = 0;
+		switch (myType) {
+		case Type::bottom:
+			alienValue = 10;
+			break;
+		case Type::middle:
+			alienValue = 20;
+			break;
+		case Type::top:
+			alienValue = 30;
+			break;
+		}
+		return alienValue;
 	}
 
 	void update(Coordinate changeInCoordinate) {

@@ -3,6 +3,7 @@
 #include "Alien.h"
 #include "ofMain.h"
 #include "Projectile.h"
+#include "Score.h"
 
 class ofApp : public ofBaseApp{
 
@@ -28,6 +29,7 @@ private:
 	const int rightBoundary = ofGetWidth() - 100;
 
 	Coordinate heroCoordinate{ static_cast<double>(ofGetWidth() / 2), 600.0 };
+	Score heroScore{ 0 };
 	const int heroMovementSpeed = 10;
 	std::vector<Projectile> heroProjectiles;
 

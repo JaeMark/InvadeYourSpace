@@ -26,7 +26,7 @@ void ofApp::setup(){
 		}
 		for (int m{ 0 }; m < alienColumn; m++) {
 			alienPosX = gridSize*m + gridInitialPosX;
-			aliens.push_back(Alien{ Coordinate{alienPosX, alienPosY}, alienType });
+			aliens.emplace_back(Alien{ Coordinate{alienPosX, alienPosY}, alienType });
 		}
 	}
 }
@@ -36,6 +36,7 @@ void ofApp::update() {
 	checkBoundary();
 	checkCollisions();
 
+	// check if the alien swarm has reached the edge
 	bool moveDown = false;
 	for (auto& alien : aliens) {
 		if (alien.isOnBoundary(leftBoundary, rightBoundary)) {
@@ -44,7 +45,7 @@ void ofApp::update() {
 			break;
 		}
 	}
-
+	// move the alien swarm
 	for (auto& alien : aliens) {
 		if (moveDown) {
 			alien.update({ alienSpeedX , alienSpeedY });
@@ -56,11 +57,18 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
+	// draw player
 	ofSetColor(255);
 	ofDrawRectangle(heroCoordinate.x, heroCoordinate.y, 20, 10);
+
+	// draw score
+	heroScore.draw();
+
+	// draw projectiles
 	for (auto& heroProjectile : heroProjectiles) {
 		heroProjectile.draw();
 	}
+	// draw alien swarm
 	for (auto& alien : aliens) {
 		alien.draw();
 
@@ -152,6 +160,7 @@ void ofApp::checkCollisions() {
 	for (int i{ 0 }; i < aliens.size(); i++) {
 		for (int j{ 0 }; j < heroProjectiles.size(); j++) {
 			if (heroProjectiles[j].collision.intersects(aliens[i].collision)) {
+				heroScore.update(aliens[i].value());
 				aliens.erase(aliens.begin() + i);
 				heroProjectiles.erase(heroProjectiles.begin() + j);
 			}
