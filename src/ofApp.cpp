@@ -32,10 +32,26 @@ void ofApp::setup(){
 }
 
 //--------------------------------------------------------------
-void ofApp::update(){
+void ofApp::update() {
 	checkBoundary();
 	checkCollisions();
 
+	bool moveDown = false;
+	for (auto& alien : aliens) {
+		if (alien.isOnBoundary(leftBoundary, rightBoundary)) {
+			moveDown = true;
+			alienSpeedX *= -1;
+			break;
+		}
+	}
+
+	for (auto& alien : aliens) {
+		if (moveDown) {
+			alien.update({ alienSpeedX , alienSpeedY });
+		} else {
+			alien.update({ alienSpeedX , 0 });
+		}
+	}
 }
 
 //--------------------------------------------------------------

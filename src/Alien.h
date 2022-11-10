@@ -33,10 +33,14 @@ public:
 		}
 	}
 
-	void update(Coordinate newCoordinate) {
-		myCoordinate.x = newCoordinate.x;
-		myCoordinate.y = newCoordinate.y;
+	void update(Coordinate changeInCoordinate) {
+		myCoordinate.x += changeInCoordinate.x;
+		myCoordinate.y += changeInCoordinate.y;
 		collision.setX(myCoordinate.x);
 		collision.setY(myCoordinate.y);
+	}
+
+	bool isOnBoundary(double leftBoundary, double rightBoundary) const {
+		return collision.x <= (leftBoundary + 5) || collision.x >= (rightBoundary - 5);
 	}
 };

@@ -37,6 +37,9 @@ private:
 	const int gridSize = 50;
 	std::vector<Alien> aliens;
 
+	double alienSpeedX = 1;
+	double alienSpeedY = 5;
+
 	void checkBoundary();
 	void checkCollisions();
 };
