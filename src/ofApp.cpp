@@ -3,56 +3,43 @@
 #include "Projectile.h"
 
 //--------------------------------------------------------------
-void ofApp::setup(){
+void ofApp::setup() {
 	//ofSetWindowShape(750, 550);
 	ofSetRectMode(OF_RECTMODE_CENTER);
 
 	// create alien matrix
 	double alienPosX = 0;
 	double alienPosY = 0;
-	double gridInitialPosX = ofGetWidth()/2 - gridSize*alienRow;
+	double gridInitialPosX = ofGetWidth() / 2 - gridSize * alienRow;
 	double gridInitialPosY = 100;
 	Alien::Type alienType;
 	for (int n{ 0 }; n < alienRow; n++) {
-		alienPosY = gridSize*n + gridInitialPosY;
+		alienPosY = gridSize * n + gridInitialPosY;
+		std::vector<Alien> alienRow;
 		// determine alien type
 		if (n == 0) {
 			alienType = Alien::Type::top;
-		} else if (n == 1 || n == 2) {
+		}
+		else if (n == 1 || n == 2) {
 			alienType = Alien::Type::middle;
 		}
 		else if (n == 3 || n == 4) {
 			alienType = Alien::Type::bottom;
 		}
 		for (int m{ 0 }; m < alienColumn; m++) {
-			alienPosX = gridSize*m + gridInitialPosX;
-			aliens.emplace_back(Alien{ Coordinate{alienPosX, alienPosY}, alienType });
+			alienPosX = gridSize * m + gridInitialPosX;
+			alienRow.emplace_back(Alien{ Coordinate{alienPosX, alienPosY}, alienType });
 		}
+		alienMatrix.push_back(alienRow);
 	}
+	alienSwarm = AlienSwarm{ alienMatrix, alienRow, alienColumn, initialSwarmSpeed };
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
 	checkBoundary();
 	checkCollisions();
-
-	// check if the alien swarm has reached the edge
-	bool moveDown = false;
-	for (auto& alien : aliens) {
-		if (alien.isOnBoundary(leftBoundary, rightBoundary)) {
-			moveDown = true;
-			alienSpeedX *= -1;
-			break;
-		}
-	}
-	// move the alien swarm
-	for (auto& alien : aliens) {
-		if (moveDown) {
-			alien.update({ alienSpeedX , alienSpeedY });
-		} else {
-			alien.update({ alienSpeedX , 0 });
-		}
-	}
+	alienSwarm.moveSwarm(leftBoundary, rightBoundary);
 }
 
 //--------------------------------------------------------------
@@ -69,32 +56,32 @@ void ofApp::draw() {
 		heroProjectile.draw();
 	}
 	// draw alien swarm
-	for (auto& alien : aliens) {
-		alien.draw();
-
-	}
+	alienSwarm.draw();
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key){
+void ofApp::keyPressed(int key) {
 	if (key == 'a') {
+		// move left
 		heroCoordinate.x -= heroMovementSpeed;
 	}
 	if (key == 'd') {
+		// move right
 		heroCoordinate.x += heroMovementSpeed;
 	}
 	if (key == 'w') {
+		// fire projectile
 		heroProjectiles.push_back(Projectile{ heroCoordinate, Projectile::Type::friendly });
 	}
 }
 
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key){
+void ofApp::keyReleased(int key) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
+void ofApp::mouseMoved(int x, int y) {
 	heroCoordinate.x = x;
 
 	/* Movement speed based movement
@@ -108,42 +95,42 @@ void ofApp::mouseMoved(int x, int y ){
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
+void ofApp::mouseDragged(int x, int y, int button) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
+void ofApp::mousePressed(int x, int y, int button) {
 	heroProjectiles.push_back(Projectile{ heroCoordinate, Projectile::Type::friendly });
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
+void ofApp::mouseReleased(int x, int y, int button) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
+void ofApp::mouseEntered(int x, int y) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
+void ofApp::mouseExited(int x, int y) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
+void ofApp::windowResized(int w, int h) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
+void ofApp::gotMessage(ofMessage msg) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
+void ofApp::dragEvent(ofDragInfo dragInfo) {
 
 }
 
@@ -157,13 +144,18 @@ void ofApp::checkBoundary() {
 }
 
 void ofApp::checkCollisions() {
-	for (int i{ 0 }; i < aliens.size(); i++) {
-		for (int j{ 0 }; j < heroProjectiles.size(); j++) {
-			if (heroProjectiles[j].collision.intersects(aliens[i].collision)) {
-				heroScore.update(aliens[i].value());
-				aliens.erase(aliens.begin() + i);
-				heroProjectiles.erase(heroProjectiles.begin() + j);
+	
+	for (int n{ 0 }; n < alienRow; n++) {
+		for(int m{ 0 }; m < alienColumn; m++) {
+			for (int j{ 0 }; j < heroProjectiles.size(); j++) {
+				if (heroProjectiles[j].collision.intersects(alienSwarm.getAlienCollision(n, m))) {
+					heroScore.update(alienSwarm.getAlienValue(n, m));
+					alienSwarm.destroyAlien(n, m);
+					heroProjectiles.erase(heroProjectiles.begin() + j);
+				}
 			}
 		}
 	}
+	
 }
+
