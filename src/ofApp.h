@@ -37,11 +37,11 @@ private:
 	const int alienRow{ 5 };
 	const int alienColumn{ 11 };
 	const int gridSize = 50;
-	std::vector<Alien> aliens;
+	std::vector<vector<Alien>> alienSwarm;
 
-	double alienSpeedX = 1;
-	double alienSpeedY = 5;
+	Coordinate alienSwarmSpeed{ 1, 5 };
 
 	void checkBoundary();
 	void checkCollisions();
+	bool isOnBoundary();
 };

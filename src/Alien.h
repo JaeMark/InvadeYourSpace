@@ -9,10 +9,12 @@ public:
 private:
 	Coordinate myCoordinate;
 	Type myType;
+	bool isAlienAlive;
 public:
 	Alien(const Coordinate& coordinate, const Type& type)
 		: myCoordinate{ coordinate }, myType{ type } {
 		collision = ofRectangle{ static_cast<float>(myCoordinate.x), static_cast<float>(myCoordinate.y), 10, 10 };
+		isAlienAlive = true;
 	}
 
 
@@ -52,11 +54,25 @@ public:
 	void update(Coordinate changeInCoordinate) {
 		myCoordinate.x += changeInCoordinate.x;
 		myCoordinate.y += changeInCoordinate.y;
-		collision.setX(myCoordinate.x);
-		collision.setY(myCoordinate.y);
+		if (isAlienAlive) {
+			collision.setX(myCoordinate.x);
+			collision.setY(myCoordinate.y);
+		} else {
+			collision.setX(-1);
+			collision.setY(-1);
+		}
+
 	}
 
 	bool isOnBoundary(double leftBoundary, double rightBoundary) const {
-		return collision.x <= (leftBoundary + 5) || collision.x >= (rightBoundary - 5);
+		return (myCoordinate.x <= (leftBoundary + 5) || myCoordinate.x >= (rightBoundary - 5)) && isAlienAlive;
+	}
+
+	void destroy() {
+		isAlienAlive = false;
+	}
+
+	bool isAlive() const {
+		return isAlienAlive;
 	}
 };

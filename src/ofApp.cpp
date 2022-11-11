@@ -14,6 +14,7 @@ void ofApp::setup(){
 	double gridInitialPosY = 100;
 	Alien::Type alienType;
 	for (int n{ 0 }; n < alienRow; n++) {
+		std::vector<Alien> aliens;
 		alienPosY = gridSize*n + gridInitialPosY;
 		// determine alien type
 		if (n == 0) {
@@ -28,6 +29,7 @@ void ofApp::setup(){
 			alienPosX = gridSize*m + gridInitialPosX;
 			aliens.emplace_back(Alien{ Coordinate{alienPosX, alienPosY}, alienType });
 		}
+		alienSwarm.push_back(aliens);
 	}
 }
 
@@ -36,21 +38,15 @@ void ofApp::update() {
 	checkBoundary();
 	checkCollisions();
 
-	// check if the alien swarm has reached the edge
-	bool moveDown = false;
-	for (auto& alien : aliens) {
-		if (alien.isOnBoundary(leftBoundary, rightBoundary)) {
-			moveDown = true;
-			alienSpeedX *= -1;
-			break;
-		}
-	}
-	// move the alien swarm
-	for (auto& alien : aliens) {
-		if (moveDown) {
-			alien.update({ alienSpeedX , alienSpeedY });
-		} else {
-			alien.update({ alienSpeedX , 0 });
+	bool moveDown = isOnBoundary();
+	for (auto& aliens : alienSwarm) {
+		for (auto& alien : aliens) {
+			if (moveDown) {
+				alien.update({ alienSwarmSpeed.x , alienSwarmSpeed.y });
+			}
+			else {
+				alien.update({ alienSwarmSpeed.x , 0 });
+			}
 		}
 	}
 }
@@ -69,9 +65,12 @@ void ofApp::draw() {
 		heroProjectile.draw();
 	}
 	// draw alien swarm
-	for (auto& alien : aliens) {
-		alien.draw();
-
+	for (auto& aliens : alienSwarm) {
+		for (auto& alien : aliens) {
+			if(alien.isAlive()) {
+				alien.draw();
+			}
+		}
 	}
 }
 
@@ -84,7 +83,7 @@ void ofApp::keyPressed(int key){
 		heroCoordinate.x += heroMovementSpeed;
 	}
 	if (key == 'w') {
-		heroProjectiles.push_back(Projectile{ heroCoordinate, Projectile::Type::friendly });
+		heroProjectiles.emplace_back(Projectile{ heroCoordinate, Projectile::Type::friendly });
 	}
 }
 
@@ -114,7 +113,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-	heroProjectiles.push_back(Projectile{ heroCoordinate, Projectile::Type::friendly });
+	heroProjectiles.emplace_back(Projectile{ heroCoordinate, Projectile::Type::friendly });
 }
 
 //--------------------------------------------------------------
@@ -157,13 +156,29 @@ void ofApp::checkBoundary() {
 }
 
 void ofApp::checkCollisions() {
-	for (int i{ 0 }; i < aliens.size(); i++) {
-		for (int j{ 0 }; j < heroProjectiles.size(); j++) {
-			if (heroProjectiles[j].collision.intersects(aliens[i].collision)) {
-				heroScore.update(aliens[i].value());
-				aliens.erase(aliens.begin() + i);
-				heroProjectiles.erase(heroProjectiles.begin() + j);
+	for (int n{ 0 }; n < alienRow; n++) {
+		for (int m{ 0 }; m < alienColumn; m++) {
+			for (int j{ 0 }; j < heroProjectiles.size(); j++) {
+				if (heroProjectiles[j].collision.intersects(alienSwarm[n][m].collision) && alienSwarm[n][m].isAlive()) {
+					heroScore.update(alienSwarm[n][m].value());
+					alienSwarm[n][m].destroy();
+					heroProjectiles.erase(heroProjectiles.begin() + j);
+				}
 			}
 		}
 	}
+}
+
+bool ofApp::isOnBoundary() {
+	// check if the alien swarm has reached the edge
+	bool moveDown = false;
+	for (auto& aliens : alienSwarm) {
+		for (auto& alien : aliens) {
+			if (alien.isOnBoundary(leftBoundary, rightBoundary)) {
+				alienSwarmSpeed.x *= -1;
+				return true;
+			}
+		}
+	}
+	return moveDown;
 }
