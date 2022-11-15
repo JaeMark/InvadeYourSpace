@@ -14,8 +14,8 @@ public:
 	
 	Projectile(const Coordinate& coordinate, const Type& type)
 		: myCoordinate{ coordinate }, myType{type} {
-		if (myType == Type::friendly) { mySpeed = 15; }
-		else if (myType == Type::enemy) { mySpeed = 1; }
+		if (myType == Type::friendly) { mySpeed = -15; }
+		else if (myType == Type::enemy) { mySpeed = 5; }
 		collision = ofRectangle{static_cast<float>(myCoordinate.x), static_cast<float>(myCoordinate.y), 10, 10 };
 	}
 
@@ -26,8 +26,12 @@ public:
 	}
 
 	void update() {
-		myCoordinate.y -= mySpeed;
+		myCoordinate.y += mySpeed;
 		collision.setY(myCoordinate.y);
+	}
+
+	void update(const Coordinate coord) {
+		myCoordinate = coord;
 	}
 
 	//CLEAN UP PROJECTILES

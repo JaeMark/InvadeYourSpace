@@ -27,7 +27,11 @@ void ofApp::setup(){
 		}
 		for (int m{ 0 }; m < alienColumn; m++) {
 			alienPosX = gridSize*m + gridInitialPosX;
-			aliens.emplace_back(Alien{ Coordinate{alienPosX, alienPosY}, alienType });
+			Coordinate alienCoord{ Coordinate{ alienPosX, alienPosY } };
+			aliens.emplace_back(Alien{ alienCoord , alienType });
+			if(n == alienRow - 1) {
+				alienBomberRow.push_back(n);
+			}
 		}
 		alienSwarm.push_back(aliens);
 	}
@@ -60,10 +64,18 @@ void ofApp::draw() {
 	// draw score
 	heroScore.draw();
 
-	// draw projectiles
+	// draw player projectiles
 	for (auto& heroProjectile : heroProjectiles) {
 		heroProjectile.draw();
 	}
+
+	// draw enemy projectiles
+	if(!isBomberAssigned) {
+		assignBomber();
+	} 
+	alienProjectile.draw();
+
+
 	// draw alien swarm
 	for (auto& aliens : alienSwarm) {
 		for (auto& alien : aliens) {
@@ -144,6 +156,12 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
+}
+
+void ofApp::assignBomber() {
+	int chosenBomber = ofRandom(0, alienColumn);
+	alienProjectile.update(alienSwarm[alienBomberRow[chosenBomber]][chosenBomber].getCoordinate());
+	isBomberAssigned = true;
 }
 
 void ofApp::checkBoundary() {

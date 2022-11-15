@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Coordinate.h"
 #include "ofGraphics.h"
+#include "Projectile.h"
 
 class Alien {
 public:
@@ -49,6 +50,10 @@ public:
 			break;
 		}
 		return alienValue;
+	}
+
+	Coordinate getCoordinate() const {
+		return myCoordinate;
 	}
 
 	void update(Coordinate changeInCoordinate) {

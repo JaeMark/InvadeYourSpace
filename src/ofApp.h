@@ -38,9 +38,13 @@ private:
 	const int alienColumn{ 11 };
 	const int gridSize = 50;
 	std::vector<vector<Alien>> alienSwarm;
+	std::vector<int> alienBomberRow; // available bombers
+	Projectile alienProjectile{{0, 0}, Projectile::Type::enemy };
+	bool isBomberAssigned = false;
 
 	Coordinate alienSwarmSpeed{ 1, 5 };
 
+	void assignBomber();
 	void checkBoundary();
 	void checkCollisions();
 	bool isOnBoundary();
