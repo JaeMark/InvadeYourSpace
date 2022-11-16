@@ -43,6 +43,7 @@ private:
 	const int alienColumn{ 11 };
 	const int gridSize = 50;
 	std::vector<vector<Alien>> alienSwarm;
+	int numAliens{ alienRow * alienColumn };
 	std::vector<int> alienBomberRow; // available bombers
 	Projectile alienProjectile{{0, 0}, Projectile::Type::enemy };
 	bool isBomberAssigned = false;
@@ -50,9 +51,11 @@ private:
 	Coordinate alienSwarmSpeed{ 1, 5 };
 
 	void assignBomber();
-	void checkVerticalBoundaries();
-	void checkHorizontalBoundaries();
-	void checkAlienCollisions();
-	void checkHeroCollisions();
+	void manageVerticalBoundaries();
+	void manageHorizontalBoundaries();
+	void manageAlienCollisions();
+	void manageHeroCollisions();
+	void manageWinCondition();
+	void manageLoseCondition();
 ;	bool isOnBoundary();
 };

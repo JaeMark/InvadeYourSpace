@@ -39,10 +39,12 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	checkVerticalBoundaries();
-	checkVerticalBoundaries();
-	checkAlienCollisions();
-	checkHeroCollisions();
+	manageVerticalBoundaries();
+	manageVerticalBoundaries();
+	manageAlienCollisions();
+	manageHeroCollisions();
+	manageLoseCondition();
+	manageWinCondition();
 
 	bool moveDown = isOnBoundary();
 	for (auto& aliens : alienSwarm) {
@@ -64,7 +66,7 @@ void ofApp::draw() {
 	ofDrawRectangle(heroCoordinate.x, heroCoordinate.y, 20, 10);
 
 	// draw score
-	heroScore.draw();
+	//heroScore.draw();
 
 	// draw player projectiles
 	for (auto& heroProjectile : heroProjectiles) {
@@ -169,7 +171,7 @@ void ofApp::assignBomber() {
 	isBomberAssigned = true;
 }
 
-void ofApp::checkVerticalBoundaries() {
+void ofApp::manageVerticalBoundaries() {
 	for (int i{ 0 }; i < heroProjectiles.size(); i++) {
 		if(heroProjectiles[i].collision.getPosition().y < upperBoundary) {
 			// clean up projectiles out of bounds
@@ -181,7 +183,7 @@ void ofApp::checkVerticalBoundaries() {
 	}
 }
 
-void ofApp::checkHorizontalBoundaries() {
+void ofApp::manageHorizontalBoundaries() {
 	if (heroCoordinate.x < leftBoundary) {
 		heroCoordinate.x = leftBoundary;
 	}
@@ -190,13 +192,14 @@ void ofApp::checkHorizontalBoundaries() {
 	}
 }
 
-void ofApp::checkAlienCollisions() {
+void ofApp::manageAlienCollisions() {
 	for (int n{ 0 }; n < alienRow; n++) {
 		for (int m{ 0 }; m < alienColumn; m++) {
 			for (int j{ 0 }; j < heroProjectiles.size(); j++) {
 				if (heroProjectiles[j].collision.intersects(alienSwarm[n][m].collision) && alienSwarm[n][m].isAlive()) {
 					heroScore.update(alienSwarm[n][m].value());
 					alienSwarm[n][m].destroy();
+					--numAliens;
 					heroProjectiles.erase(heroProjectiles.begin() + j);
 				}
 			}
@@ -204,13 +207,24 @@ void ofApp::checkAlienCollisions() {
 	}
 }
 
-void ofApp::checkHeroCollisions() {
+void ofApp::manageHeroCollisions() {
 	if(heroCollision.intersects(alienProjectile.collision)) {
 		isBomberAssigned = false; // bomber will be reassigned
 		heroHealth.depleteHealth();
-		std::cout << heroHealth.isplayerDead() << "\n";
 	}
 }
+
+void ofApp::manageWinCondition() {
+	if(numAliens <= 0) {
+		std::cout << "YOU WIN!!" << "\n";
+	}
+}
+void ofApp::manageLoseCondition() {
+	if (heroHealth.isDead()) {
+		std::cout << "YOU LOSE!!" << "\n";
+	}
+}
+
 
 bool ofApp::isOnBoundary() {
 	// check if the alien swarm has reached the edge

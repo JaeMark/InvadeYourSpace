@@ -6,7 +6,7 @@ public:
 	Health(const int& lives)
 		: myLives{ lives } {}
 
-	bool isplayerDead() {
+	bool isDead() const {
 		return myLives <= 0;
 	}
 
