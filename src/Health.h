@@ -6,11 +6,11 @@ public:
 	Health(const int& lives)
 		: myLives{ lives } {}
 
-	bool isDead() const {
+	bool isDepleted() const {
 		return myLives <= 0;
 	}
 
-	void depleteHealth() {
+	void loseHealth() {
 		--myLives;
 	}
 };

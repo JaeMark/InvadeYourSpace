@@ -210,7 +210,7 @@ void ofApp::manageAlienCollisions() {
 void ofApp::manageHeroCollisions() {
 	if(heroCollision.intersects(alienProjectile.collision)) {
 		isBomberAssigned = false; // bomber will be reassigned
-		heroHealth.depleteHealth();
+		heroHealth.loseHealth();
 	}
 }
 
@@ -220,7 +220,7 @@ void ofApp::manageWinCondition() {
 	}
 }
 void ofApp::manageLoseCondition() {
-	if (heroHealth.isDead()) {
+	if (heroHealth.isDepleted()) {
 		std::cout << "YOU LOSE!!" << "\n";
 	}
 }
