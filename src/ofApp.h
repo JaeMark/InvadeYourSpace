@@ -31,6 +31,7 @@ private:
 	const int lowerBoundary = ofGetHeight();
 
 	Coordinate heroCoordinate{ static_cast<double>(ofGetWidth() / 2), 600.0 };
+	ofRectangle heroCollision = ofRectangle{ static_cast<float>(heroCoordinate.x), static_cast<float>(heroCoordinate.y), 20, 10 };
 	Score heroScore{ 0 };
 	const int heroMovementSpeed = 10;
 	std::vector<Projectile> heroProjectiles;
@@ -47,8 +48,9 @@ private:
 	Coordinate alienSwarmSpeed{ 1, 5 };
 
 	void assignBomber();
-	void checkVerticleBoundaries();
+	void checkVerticalBoundaries();
 	void checkHorizontalBoundaries();
-	void checkCollisions();
-	bool isOnBoundary();
+	void checkAlienCollisions();
+	void checkHeroCollisions();
+;	bool isOnBoundary();
 };

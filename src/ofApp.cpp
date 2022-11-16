@@ -39,9 +39,10 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	checkVerticleBoundaries();
-	checkVerticleBoundaries();
-	checkCollisions();
+	checkVerticalBoundaries();
+	checkVerticalBoundaries();
+	checkAlienCollisions();
+	checkHeroCollisions();
 
 	bool moveDown = isOnBoundary();
 	for (auto& aliens : alienSwarm) {
@@ -91,9 +92,11 @@ void ofApp::draw() {
 void ofApp::keyPressed(int key){
 	if (key == 'a') {
 		heroCoordinate.x -= heroMovementSpeed;
+		heroCollision.setX(heroCoordinate.x);
 	}
 	if (key == 'd') {
 		heroCoordinate.x += heroMovementSpeed;
+		heroCollision.setX(heroCoordinate.x);
 	}
 	if (key == 'w') {
 		heroProjectiles.emplace_back(Projectile{ heroCoordinate, Projectile::Type::friendly });
@@ -108,6 +111,7 @@ void ofApp::keyReleased(int key){
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
 	heroCoordinate.x = x;
+	heroCollision.setX(heroCoordinate.x);
 
 	/* Movement speed based movement
 	if (x < heroCoordinate.x) {
@@ -165,7 +169,7 @@ void ofApp::assignBomber() {
 	isBomberAssigned = true;
 }
 
-void ofApp::checkVerticleBoundaries() {
+void ofApp::checkVerticalBoundaries() {
 	for (int i{ 0 }; i < heroProjectiles.size(); i++) {
 		if(heroProjectiles[i].collision.getPosition().y < upperBoundary) {
 			// clean up projectiles out of bounds
@@ -186,7 +190,7 @@ void ofApp::checkHorizontalBoundaries() {
 	}
 }
 
-void ofApp::checkCollisions() {
+void ofApp::checkAlienCollisions() {
 	for (int n{ 0 }; n < alienRow; n++) {
 		for (int m{ 0 }; m < alienColumn; m++) {
 			for (int j{ 0 }; j < heroProjectiles.size(); j++) {
@@ -197,6 +201,12 @@ void ofApp::checkCollisions() {
 				}
 			}
 		}
+	}
+}
+
+void ofApp::checkHeroCollisions() {
+	if(heroCollision.intersects(alienProjectile.collision)) {
+		isBomberAssigned = false; // bomber will be reassigned
 	}
 }
 
