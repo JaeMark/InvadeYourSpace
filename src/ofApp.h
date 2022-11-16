@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Alien.h"
+#include "Health.h"
 #include "ofMain.h"
 #include "Projectile.h"
 #include "Score.h"
@@ -33,6 +34,7 @@ private:
 	Coordinate heroCoordinate{ static_cast<double>(ofGetWidth() / 2), 600.0 };
 	ofRectangle heroCollision = ofRectangle{ static_cast<float>(heroCoordinate.x), static_cast<float>(heroCoordinate.y), 20, 10 };
 	Score heroScore{ 0 };
+	Health heroHealth{ 3 };
 	const int heroMovementSpeed = 10;
 	std::vector<Projectile> heroProjectiles;
 

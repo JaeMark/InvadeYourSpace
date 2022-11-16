@@ -207,6 +207,8 @@ void ofApp::checkAlienCollisions() {
 void ofApp::checkHeroCollisions() {
 	if(heroCollision.intersects(alienProjectile.collision)) {
 		isBomberAssigned = false; // bomber will be reassigned
+		heroHealth.depleteHealth();
+		std::cout << heroHealth.isplayerDead() << "\n";
 	}
 }
 
