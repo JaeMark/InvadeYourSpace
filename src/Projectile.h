@@ -32,6 +32,8 @@ public:
 
 	void update(const Coordinate coord) {
 		myCoordinate = coord;
+		collision.setX(coord.x);
+		collision.setY(coord.y);
 	}
 
 	//CLEAN UP PROJECTILES

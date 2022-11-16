@@ -39,7 +39,8 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	checkBoundary();
+	checkVerticleBoundaries();
+	checkVerticleBoundaries();
 	checkCollisions();
 
 	bool moveDown = isOnBoundary();
@@ -164,7 +165,19 @@ void ofApp::assignBomber() {
 	isBomberAssigned = true;
 }
 
-void ofApp::checkBoundary() {
+void ofApp::checkVerticleBoundaries() {
+	for (int i{ 0 }; i < heroProjectiles.size(); i++) {
+		if(heroProjectiles[i].collision.getPosition().y < upperBoundary) {
+			// clean up projectiles out of bounds
+			heroProjectiles.erase(heroProjectiles.begin() + i);
+		}
+	}
+	if (alienProjectile.collision.getPosition().y > lowerBoundary) {
+		isBomberAssigned = false; // bomber will be reassigned
+	}
+}
+
+void ofApp::checkHorizontalBoundaries() {
 	if (heroCoordinate.x < leftBoundary) {
 		heroCoordinate.x = leftBoundary;
 	}

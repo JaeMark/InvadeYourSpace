@@ -27,6 +27,8 @@ class ofApp : public ofBaseApp{
 private:
 	const int leftBoundary = 100;
 	const int rightBoundary = ofGetWidth() - 100;
+	const int upperBoundary = 0;
+	const int lowerBoundary = ofGetHeight();
 
 	Coordinate heroCoordinate{ static_cast<double>(ofGetWidth() / 2), 600.0 };
 	Score heroScore{ 0 };
@@ -45,7 +47,8 @@ private:
 	Coordinate alienSwarmSpeed{ 1, 5 };
 
 	void assignBomber();
-	void checkBoundary();
+	void checkVerticleBoundaries();
+	void checkHorizontalBoundaries();
 	void checkCollisions();
 	bool isOnBoundary();
 };
