@@ -186,6 +186,7 @@
     <ClCompile Include="src\Health.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
+    <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Projectile.cpp" />
     <ClCompile Include="src\Score.cpp" />
   </ItemGroup>
@@ -194,6 +195,7 @@
     <ClInclude Include="src\Coordinate.h" />
     <ClInclude Include="src\Health.h" />
     <ClInclude Include="src\ofApp.h" />
+    <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Projectile.h" />
     <ClInclude Include="src\Score.h" />
   </ItemGroup>
