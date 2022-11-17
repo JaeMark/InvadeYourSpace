@@ -1,16 +1,16 @@
 ﻿#pragma once
 
 class Health {
-	int myLives;
+	int myHealth;
 public:
 	Health(const int& lives)
-		: myLives{ lives } {}
+		: myHealth{ lives } {}
 
 	bool isDepleted() const {
-		return myLives <= 0;
+		return myHealth <= 0;
 	}
 
-	void loseHealth() {
-		--myLives;
+	void loseHealth(const int damage) {
+		myHealth += damage;
 	}
 };
