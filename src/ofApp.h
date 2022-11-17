@@ -47,8 +47,7 @@ private:
 	std::vector<vector<Alien>> alienSwarm;
 	int numAliens{ alienRow * alienColumn };
 	std::vector<int> alienBomberRow; // available bombers
-	Projectile alienProjectile{{0, 0}, Projectile::Type::enemy };
-	bool isBomberAssigned = false;
+	std::vector<Projectile> alienProjectiles;
 	const int enemyProjectileDamage = -1;
 
 	Coordinate alienSwarmSpeed{ 1, 5 };

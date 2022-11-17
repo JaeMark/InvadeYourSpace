@@ -7,6 +7,8 @@ void ofApp::setup(){
 	//ofSetWindowShape(750, 550);
 	ofSetRectMode(OF_RECTMODE_CENTER);
 
+	ofSetFrameRate(60);
+
 	// create alien matrix
 	double alienPosX = 0;
 	double alienPosY = 0;
@@ -29,9 +31,6 @@ void ofApp::setup(){
 			alienPosX = gridSize*m + gridInitialPosX;
 			Coordinate alienCoord{ Coordinate{ alienPosX, alienPosY } };
 			aliens.emplace_back(Alien{ alienCoord , alienType });
-			if(n == alienRow - 1) {
-				alienBomberRow.push_back(n);
-			}
 		}
 		alienSwarm.push_back(aliens);
 	}
@@ -57,6 +56,7 @@ void ofApp::update() {
 			}
 		}
 	}
+	assignBomber();
 }
 
 //--------------------------------------------------------------
@@ -77,11 +77,9 @@ void ofApp::draw() {
 	player.updateProjectiles();
 
 	// draw enemy projectiles
-	if(!isBomberAssigned) {
-		assignBomber();
-	} 
-	alienProjectile.draw();
-
+	for(auto& projectile : alienProjectiles) {
+		projectile.draw();
+	}
 
 	// draw alien swarm
 	for (auto& aliens : alienSwarm) {
@@ -157,9 +155,12 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 }
 
 void ofApp::assignBomber() {
-	int chosenBomber = ofRandom(0, alienColumn);
-	alienProjectile.update(alienSwarm[alienBomberRow[chosenBomber]][chosenBomber].getCoordinate());
-	isBomberAssigned = true;
+	if (alienProjectiles.size() < 2) {
+		const float probability = 0.05;
+		if (probability > ofRandom(0, 1)) {
+			alienProjectiles.emplace_back(Projectile{ alienSwarm[ofRandom(0, alienRow)][ofRandom(0, alienColumn)].getCoordinate(), Projectile::Type::enemy });
+		}
+	}
 }
 
 void ofApp::manageVerticalBoundaries() {
@@ -170,8 +171,10 @@ void ofApp::manageVerticalBoundaries() {
 			player.deleteProjectile(i);
 		}
 	}
-	if (alienProjectile.collision.getPosition().y > lowerBoundary) {
-		isBomberAssigned = false; // bomber will be reassigned
+	for (int i{ 0 }; i < alienProjectiles.size(); i++) {
+		if (alienProjectiles[i].collision.getPosition().y > lowerBoundary) {
+			alienProjectiles.erase(alienProjectiles.begin() + i);
+		}
 	}
 }
 
@@ -201,9 +204,10 @@ void ofApp::manageAlienCollisions() {
 }
 
 void ofApp::manageHeroCollisions() {
-	if(player.isOverlapping(alienProjectile.collision)) {
-		isBomberAssigned = false; // bomber will be reassigned
-		player.updateHealth(enemyProjectileDamage);
+	for (auto& projectile : alienProjectiles) {
+		if (player.isOverlapping(projectile.collision)) {
+			player.updateHealth(enemyProjectileDamage);
+		}
 	}
 }
 
