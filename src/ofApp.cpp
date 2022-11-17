@@ -39,7 +39,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	manageVerticalBoundaries();
+	manageHorizontalBoundaries();
 	manageVerticalBoundaries();
 	manageAlienCollisions();
 	manageHeroCollisions();
@@ -62,16 +62,19 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::draw() {
 	// draw player
-	ofSetColor(255);
-	ofDrawRectangle(heroCoordinate.x, heroCoordinate.y, 20, 10);
+	player.draw();
 
 	// draw score
 	//heroScore.draw();
 
 	// draw player projectiles
-	for (auto& heroProjectile : heroProjectiles) {
+	/*
+	for (auto& heroProjectile : player.getProjectiles()) {
 		heroProjectile.draw();
 	}
+	*/
+
+	player.updateProjectiles();
 
 	// draw enemy projectiles
 	if(!isBomberAssigned) {
@@ -93,15 +96,13 @@ void ofApp::draw() {
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 	if (key == 'a') {
-		heroCoordinate.x -= heroMovementSpeed;
-		heroCollision.setX(heroCoordinate.x);
+		player.updateCoordinateX(-heroMovementSpeed);
 	}
 	if (key == 'd') {
-		heroCoordinate.x += heroMovementSpeed;
-		heroCollision.setX(heroCoordinate.x);
+		player.updateCoordinateX(heroMovementSpeed);
 	}
 	if (key == 'w') {
-		heroProjectiles.emplace_back(Projectile{ heroCoordinate, Projectile::Type::friendly });
+		player.addProjectile();
 	}
 }
 
@@ -112,17 +113,7 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-	heroCoordinate.x = x;
-	heroCollision.setX(heroCoordinate.x);
-
-	/* Movement speed based movement
-	if (x < heroCoordinate.x) {
-		heroCoordinate.x -= heroMovementSpeed;
-	}
-	if (x > heroCoordinate.x) {
-		heroCoordinate.x += heroMovementSpeed;
-	}
-	*/
+	player.setCoordinateX(x);
 }
 
 //--------------------------------------------------------------
@@ -132,7 +123,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-	heroProjectiles.emplace_back(Projectile{ heroCoordinate, Projectile::Type::friendly });
+	player.addProjectile();
 }
 
 //--------------------------------------------------------------
@@ -172,10 +163,11 @@ void ofApp::assignBomber() {
 }
 
 void ofApp::manageVerticalBoundaries() {
-	for (int i{ 0 }; i < heroProjectiles.size(); i++) {
-		if(heroProjectiles[i].collision.getPosition().y < upperBoundary) {
+	const std::vector<Projectile> playerProjectiles{ player.getProjectiles() };
+	for (int i{ 0 }; i < playerProjectiles.size(); i++) {
+		if(playerProjectiles[i].collision.getPosition().y < upperBoundary) {
 			// clean up projectiles out of bounds
-			heroProjectiles.erase(heroProjectiles.begin() + i);
+			player.deleteProjectile(i);
 		}
 	}
 	if (alienProjectile.collision.getPosition().y > lowerBoundary) {
@@ -184,23 +176,24 @@ void ofApp::manageVerticalBoundaries() {
 }
 
 void ofApp::manageHorizontalBoundaries() {
-	if (heroCoordinate.x < leftBoundary) {
-		heroCoordinate.x = leftBoundary;
+	const double playerCoordinateX = player.getCoordinate().x;
+	if (playerCoordinateX < leftBoundary) {
+		player.setCoordinateX(leftBoundary);
 	}
-	if (heroCoordinate.x > rightBoundary) {
-		heroCoordinate.x = rightBoundary;
+	if (playerCoordinateX > rightBoundary) {
+		player.setCoordinateX(rightBoundary);
 	}
 }
 
 void ofApp::manageAlienCollisions() {
 	for (int n{ 0 }; n < alienRow; n++) {
 		for (int m{ 0 }; m < alienColumn; m++) {
-			for (int j{ 0 }; j < heroProjectiles.size(); j++) {
-				if (heroProjectiles[j].collision.intersects(alienSwarm[n][m].collision) && alienSwarm[n][m].isAlive()) {
-					heroScore.update(alienSwarm[n][m].value());
+			for (int j{ 0 }; j < player.getProjectiles().size(); j++) {
+				if (player.isProjectileOverlapping(j, alienSwarm[n][m].collision) && alienSwarm[n][m].isAlive()) {
+					player.updateScore(alienSwarm[n][m].value());
+					player.deleteProjectile(j);
 					alienSwarm[n][m].destroy();
 					--numAliens;
-					heroProjectiles.erase(heroProjectiles.begin() + j);
 				}
 			}
 		}
@@ -208,9 +201,9 @@ void ofApp::manageAlienCollisions() {
 }
 
 void ofApp::manageHeroCollisions() {
-	if(heroCollision.intersects(alienProjectile.collision)) {
+	if(player.isOverlapping(alienProjectile.collision)) {
 		isBomberAssigned = false; // bomber will be reassigned
-		heroHealth.loseHealth();
+		player.updateHealth(enemyProjectileDamage);
 	}
 }
 
@@ -220,7 +213,7 @@ void ofApp::manageWinCondition() {
 	}
 }
 void ofApp::manageLoseCondition() {
-	if (heroHealth.isDepleted()) {
+	if (player.isDead()) {
 		std::cout << "YOU LOSE!!" << "\n";
 	}
 }

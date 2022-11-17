@@ -20,7 +20,14 @@ public:
 		myCollision = ofRectangle{ static_cast<float>(myCoordinate.x), static_cast<float>(myCoordinate.y), 10, 10 };
 	}
 
-	void updateCoordinate(const double deltaX) {
+	void draw() {
+		ofSetColor(255);
+		myAvatar.setX(myCoordinate.x);
+		myAvatar.setY(myCoordinate.y);
+		ofDrawRectangle(myAvatar);
+	}
+
+	void updateCoordinateX(const double deltaX) {
 		myCoordinate.x += deltaX;
 		myCollision.setX(myCoordinate.x);
 	}
@@ -33,19 +40,42 @@ public:
 		myScore.update(deltaScore);
 	}
 
-	void addProjectile(const Projectile& projectile) {
-		myProjectiles.push_back(projectile);
+	void updateProjectiles() {
+		for (auto& projectile : myProjectiles) {
+			projectile.draw();
+		}
+	}
+
+	void addProjectile() {
+		myProjectiles.emplace_back(Projectile{ myCoordinate, Projectile::Type::friendly });
 	}
 
 	void deleteProjectile(int index) {
 		myProjectiles.erase(myProjectiles.begin() + index);
 	}
 
-	bool isProjectileOverlapping(const int index, const ofRectangle& otherCollision) {
+	std::vector<Projectile> getProjectiles() {
+		return myProjectiles;
+	}
+
+	Coordinate getCoordinate() const {
+		return myCoordinate;
+	}
+
+	void setCoordinateX(const double x) {
+		myCoordinate.x = x;
+		myCollision.setX(myCoordinate.x);
+	}
+
+	bool isOverlapping(const ofRectangle& otherCollision) const {
+		return myCollision.intersects(otherCollision);
+	}
+
+	bool isProjectileOverlapping(const int index, const ofRectangle& otherCollision) const {
 		return myProjectiles[index].collision.intersects(otherCollision);
 	}
 
-	bool isPlayerDead() {
+	bool isDead() const {
 		return myHealth.isDepleted();
 	}
 };

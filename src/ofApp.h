@@ -3,6 +3,7 @@
 #include "Alien.h"
 #include "Health.h"
 #include "ofMain.h"
+#include "Player.h"
 #include "Projectile.h"
 #include "Score.h"
 
@@ -30,13 +31,14 @@ private:
 	const int rightBoundary = ofGetWidth() - 100;
 	const int upperBoundary = 0;
 	const int lowerBoundary = ofGetHeight();
-
+		
 	Coordinate heroCoordinate{ static_cast<double>(ofGetWidth() / 2), 600.0 };
 	ofRectangle heroCollision = ofRectangle{ static_cast<float>(heroCoordinate.x), static_cast<float>(heroCoordinate.y), 20, 10 };
 	Score heroScore{ 0 };
 	Health heroHealth{ 3 };
-	const int heroMovementSpeed = 10;
 	std::vector<Projectile> heroProjectiles;
+	Player player{ Player{ ofRectangle(heroCoordinate.x, heroCoordinate.y, 20, 10), heroCoordinate, heroHealth, heroScore, heroProjectiles } };
+	const int heroMovementSpeed = 10;
 
 
 	const int alienRow{ 5 };
@@ -47,6 +49,7 @@ private:
 	std::vector<int> alienBomberRow; // available bombers
 	Projectile alienProjectile{{0, 0}, Projectile::Type::enemy };
 	bool isBomberAssigned = false;
+	const int enemyProjectileDamage = -1;
 
 	Coordinate alienSwarmSpeed{ 1, 5 };
 
