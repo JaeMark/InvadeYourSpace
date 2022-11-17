@@ -182,6 +182,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Alien.cpp" />
+    <ClCompile Include="src\AlienSwarm.cpp" />
     <ClCompile Include="src\Coordinate.cpp" />
     <ClCompile Include="src\Health.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -192,6 +193,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Alien.h" />
+    <ClInclude Include="src\AlienSwarm.h" />
     <ClInclude Include="src\Coordinate.h" />
     <ClInclude Include="src\Health.h" />
     <ClInclude Include="src\ofApp.h" />
