@@ -108,7 +108,7 @@ private:
 		}
 	}
 
-	Coordinate getAvailableAlienCoordinate() {
+	Coordinate getAvailableAlienCoordinate() const {
 		std::vector<Alien> aliveAliens;
 		for (auto& aliens : mySwarm) {
 			for (auto& alien : aliens) {

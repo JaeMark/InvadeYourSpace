@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Alien.h"
+#include "AlienSwarm.h"
 #include "Health.h"
 #include "ofMain.h"
 #include "Player.h"
@@ -44,13 +45,10 @@ private:
 	const int alienRow{ 5 };
 	const int alienColumn{ 11 };
 	const int gridSize = 50;
-	std::vector<vector<Alien>> alienSwarm;
-	int numAliens{ alienRow * alienColumn };
-	std::vector<int> alienBomberRow; // available bombers
+	Coordinate initialAlienSwarmSpeed{ 1, 5 };
 	std::vector<Projectile> alienProjectiles;
+	AlienSwarm alienSwarm{ AlienSwarm{alienRow, alienColumn, gridSize, leftBoundary, rightBoundary, initialAlienSwarmSpeed, alienProjectiles} };
 	const int enemyProjectileDamage = -1;
-
-	Coordinate alienSwarmSpeed{ 1, 5 };
 
 	void assignBomber();
 	void manageVerticalBoundaries();
