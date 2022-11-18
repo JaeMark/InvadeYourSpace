@@ -8,32 +8,6 @@ void ofApp::setup(){
 	ofSetRectMode(OF_RECTMODE_CENTER);
 
 	ofSetFrameRate(60);
-
-	// create alien matrix
-	double alienPosX = 0;
-	double alienPosY = 0;
-	double gridInitialPosX = ofGetWidth()/2 - gridSize*alienRow;
-	double gridInitialPosY = 100;
-	Alien::Type alienType;
-	for (int n{ 0 }; n < alienRow; n++) {
-		std::vector<Alien> aliens;
-		alienPosY = gridSize*n + gridInitialPosY;
-		// determine alien type
-		if (n == 0) {
-			alienType = Alien::Type::top;
-		} else if (n == 1 || n == 2) {
-			alienType = Alien::Type::middle;
-		}
-		else if (n == 3 || n == 4) {
-			alienType = Alien::Type::bottom;
-		}
-		for (int m{ 0 }; m < alienColumn; m++) {
-			alienPosX = gridSize*m + gridInitialPosX;
-			Coordinate alienCoord{ Coordinate{ alienPosX, alienPosY } };
-			aliens.emplace_back(Alien{ alienCoord , alienType });
-		}
-		alienSwarm.push_back(aliens);
-	}
 }
 
 //--------------------------------------------------------------
@@ -45,18 +19,7 @@ void ofApp::update() {
 	manageLoseCondition();
 	manageWinCondition();
 
-	bool moveDown = isOnBoundary();
-	for (auto& aliens : alienSwarm) {
-		for (auto& alien : aliens) {
-			if (moveDown) {
-				alien.update({ alienSwarmSpeed.x , alienSwarmSpeed.y });
-			}
-			else {
-				alien.update({ alienSwarmSpeed.x , 0 });
-			}
-		}
-	}
-	assignBomber();
+	alienSwarm.update();
 }
 
 //--------------------------------------------------------------
@@ -68,27 +31,13 @@ void ofApp::draw() {
 	//heroScore.draw();
 
 	// draw player projectiles
-	/*
-	for (auto& heroProjectile : player.getProjectiles()) {
-		heroProjectile.draw();
-	}
-	*/
-
 	player.updateProjectiles();
 
 	// draw enemy projectiles
-	for(auto& projectile : alienProjectiles) {
-		projectile.draw();
-	}
+	alienSwarm.drawProjectiles();
 
 	// draw alien swarm
-	for (auto& aliens : alienSwarm) {
-		for (auto& alien : aliens) {
-			if(alien.isAlive()) {
-				alien.draw();
-			}
-		}
-	}
+	alienSwarm.draw();
 }
 
 //--------------------------------------------------------------
@@ -155,12 +104,10 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 }
 
 void ofApp::assignBomber() {
-	if (alienProjectiles.size() < 2) {
-		const float probability = 0.05;
-		if (probability > ofRandom(0, 1)) {
-			alienProjectiles.emplace_back(Projectile{ alienSwarm[ofRandom(0, alienRow)][ofRandom(0, alienColumn)].getCoordinate(), Projectile::Type::enemy });
-		}
-	}
+	const float randomNumber = ofRandomf(); // random number from 0-1;
+	//if (randomNumber < attackProbability) {
+		alienSwarm.addProjectile();
+	//}
 }
 
 void ofApp::manageVerticalBoundaries() {
@@ -171,11 +118,7 @@ void ofApp::manageVerticalBoundaries() {
 			player.deleteProjectile(i);
 		}
 	}
-	for (int i{ 0 }; i < alienProjectiles.size(); i++) {
-		if (alienProjectiles[i].collision.getPosition().y > lowerBoundary) {
-			alienProjectiles.erase(alienProjectiles.begin() + i);
-		}
-	}
+	alienSwarm.cleanUpProjectiles(lowerBoundary);
 }
 
 void ofApp::manageHorizontalBoundaries() {
@@ -192,11 +135,10 @@ void ofApp::manageAlienCollisions() {
 	for (int n{ 0 }; n < alienRow; n++) {
 		for (int m{ 0 }; m < alienColumn; m++) {
 			for (int j{ 0 }; j < player.getProjectiles().size(); j++) {
-				if (player.isProjectileOverlapping(j, alienSwarm[n][m].collision) && alienSwarm[n][m].isAlive()) {
-					player.updateScore(alienSwarm[n][m].value());
+				if (player.isProjectileOverlapping(j, alienSwarm.getAlienCollision(n, m)) && alienSwarm.isAlienAlive(n, m)) {
+					player.updateScore(alienSwarm.getAlienScore(n, m));
 					player.deleteProjectile(j);
-					alienSwarm[n][m].destroy();
-					--numAliens;
+					alienSwarm.destroyAlien(n, m);
 				}
 			}
 		}
@@ -211,28 +153,13 @@ void ofApp::manageHeroCollisions() {
 	}
 }
 
-void ofApp::manageWinCondition() {
-	if(numAliens <= 0) {
+void ofApp::manageWinCondition() const {
+	if(alienSwarm.isDestroyed()) {
 		std::cout << "YOU WIN!!" << "\n";
 	}
 }
-void ofApp::manageLoseCondition() {
+void ofApp::manageLoseCondition() const {
 	if (player.isDead()) {
 		std::cout << "YOU LOSE!!" << "\n";
 	}
-}
-
-
-bool ofApp::isOnBoundary() {
-	// check if the alien swarm has reached the edge
-	bool moveDown = false;
-	for (auto& aliens : alienSwarm) {
-		for (auto& alien : aliens) {
-			if (alien.isOnBoundary(leftBoundary, rightBoundary)) {
-				alienSwarmSpeed.x *= -1;
-				return true;
-			}
-		}
-	}
-	return moveDown;
 }

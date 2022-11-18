@@ -31,17 +31,11 @@ public:
 		}
 	}
 
-	void update(bool moveDown) {
-		checkBoundary();
+	void update() {
+		const Coordinate newSpeed = getNewSwarmSpeed();
 		for (auto& aliens : mySwarm) {
 			for (auto& alien : aliens) {
-				if (moveDown) {
-					// move alien swarm down
-					alien.update({ mySpeed.x , mySpeed.y });
-				}
-				else {
-					alien.update({ mySpeed.x , 0 });
-				}
+				alien.update(newSpeed);
 			}
 		}
 	}
@@ -55,7 +49,25 @@ public:
 		return numLivingAliens == 0;
 	}
 
+	bool isAlienAlive(const int n, const int m) const {
+		return mySwarm[n][m].isAlive();
+	}
+
+	ofRectangle getAlienCollision(const int n, const int m) {
+		return mySwarm[n][m].collision;
+	}
+
+	int getAlienScore(const int n, const int m) const {
+		return mySwarm[n][m].value();
+	}
+
+
 	// Projectiles
+	void drawProjectiles() {
+		for (auto& projectile : myProjectiles) {
+			projectile.draw();
+		}
+	}
 
 	void addProjectile() {
 		const Coordinate alienCoordinate = getAvailableAlienCoordinate();
@@ -66,6 +78,15 @@ public:
 		myProjectiles.erase(myProjectiles.begin() + index);
 
 	}
+
+	void cleanUpProjectiles(const int boundary) {
+		for (int i{ 0 }; i < myProjectiles.size(); i++) {
+			if (myProjectiles[i].collision.getPosition().y > boundary) {
+				deleteProjectile(i);
+			}
+		}
+	}
+
 private:
 	void initializeSwarm() {
 		// create alien matrix
@@ -96,16 +117,18 @@ private:
 		}
 	}
 
-	void checkBoundary() {
+	Coordinate getNewSwarmSpeed() {
 		for (auto& aliens : mySwarm) {
 			for (auto& alien : aliens) {
 				if (alien.isOnBoundary(myLeftBoundary, myRightBoundary)) {
-					// change alien swarm direction
+					// change alien swarm velocity
 					mySpeed.x *= -1;
-					return;
+					return Coordinate{mySpeed.x, mySpeed.y };
 				}
 			}
 		}
+		// no change in velocity direction
+		return Coordinate{ mySpeed.x, 0 };
 	}
 
 	Coordinate getAvailableAlienCoordinate() const {
