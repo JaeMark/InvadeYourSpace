@@ -50,7 +50,7 @@ public:
 		myProjectiles.emplace_back(Projectile{ myCoordinate, Projectile::Type::friendly });
 	}
 
-	void deleteProjectile(int index) {
+	void destroyProjectile(int index) {
 		myProjectiles.erase(myProjectiles.begin() + index);
 	}
 

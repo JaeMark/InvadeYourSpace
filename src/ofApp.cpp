@@ -115,7 +115,7 @@ void ofApp::manageVerticalBoundaries() {
 	for (int i{ 0 }; i < playerProjectiles.size(); i++) {
 		if(playerProjectiles[i].collision.getPosition().y < upperBoundary) {
 			// clean up projectiles out of bounds
-			player.deleteProjectile(i);
+			player.destroyProjectile(i);
 		}
 	}
 	alienSwarm.cleanUpProjectiles(lowerBoundary);
@@ -137,7 +137,7 @@ void ofApp::manageAlienCollisions() {
 			for (int j{ 0 }; j < player.getProjectiles().size(); j++) {
 				if (player.isProjectileOverlapping(j, alienSwarm.getAlienCollision(n, m)) && alienSwarm.isAlienAlive(n, m)) {
 					player.updateScore(alienSwarm.getAlienScore(n, m));
-					player.deleteProjectile(j);
+					player.destroyProjectile(j);
 					alienSwarm.destroyAlien(n, m);
 				}
 			}
@@ -146,9 +146,10 @@ void ofApp::manageAlienCollisions() {
 }
 
 void ofApp::manageHeroCollisions() {
-	for (auto& projectile : alienProjectiles) {
-		if (player.isOverlapping(projectile.collision)) {
+	for (size_t i{ 0 }; i < alienSwarm.getNumProjectile(); i++) {
+		if (player.isOverlapping(alienSwarm.getProjectileCollision(i))) {
 			player.updateHealth(enemyProjectileDamage);
+			alienSwarm.destroyProjectile(i);
 		}
 	}
 }

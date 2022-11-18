@@ -74,15 +74,23 @@ public:
 		myProjectiles.emplace_back(Projectile{ alienCoordinate, Projectile::Type::enemy });
 	}
 
-	void deleteProjectile(int index) {
+	void destroyProjectile(int index) {
 		myProjectiles.erase(myProjectiles.begin() + index);
 
+	}
+
+	size_t getNumProjectile() const {
+		return myProjectiles.size();
+	}
+
+	ofRectangle getProjectileCollision(const int index) const {
+		return myProjectiles[index].collision;
 	}
 
 	void cleanUpProjectiles(const int boundary) {
 		for (int i{ 0 }; i < myProjectiles.size(); i++) {
 			if (myProjectiles[i].collision.getPosition().y > boundary) {
-				deleteProjectile(i);
+				destroyProjectile(i);
 			}
 		}
 	}
