@@ -38,14 +38,14 @@ private:
 	Score heroScore{ 0 };
 	Health heroHealth{ 3 };
 	std::vector<Projectile> heroProjectiles;
-	Player player{ Player{ ofRectangle(heroCoordinate.x, heroCoordinate.y, 20, 10), heroCoordinate, heroHealth, heroScore, heroProjectiles } };
+	Player player{ Player{ "Assets/playerShip.png", heroCoordinate, heroHealth, heroScore, heroProjectiles}};
 	const int heroMovementSpeed = 10;
 
 
 	const int alienRow{ 5 };
 	const int alienColumn{ 11 };
 	const int gridSize = 50;
-	Coordinate initialAlienSwarmSpeed{ 1, 5 };
+	Coordinate initialAlienSwarmSpeed{ 1, 10 };
 	std::vector<Projectile> alienProjectiles;
 	AlienSwarm alienSwarm{ AlienSwarm{alienRow, alienColumn, gridSize, leftBoundary, rightBoundary, initialAlienSwarmSpeed, alienProjectiles} };
 	const float attackProbability = 0.01;

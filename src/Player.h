@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Coordinate.h"
 #include "Health.h"
+#include "ofImage.h"
 #include "ofRectangle.h"
 #include "Projectile.h"
 #include "Score.h"
@@ -9,22 +10,23 @@ class Player {
 public:
 	ofRectangle myCollision;
 private:
-	ofRectangle myAvatar;
+	ofImage myAvatar;
 	Coordinate myCoordinate;
 	Health myHealth;
 	Score myScore;
 	std::vector<Projectile> myProjectiles;
 public:
-	Player(const ofRectangle& avatar, const Coordinate& coordinate, const Health& health, const Score& score, const std::vector<Projectile>& projectiles)
-		: myAvatar{ avatar }, myCoordinate{ coordinate }, myHealth{ health }, myScore{ score }, myProjectiles{ projectiles } {
-		myCollision = ofRectangle{ static_cast<float>(myCoordinate.x), static_cast<float>(myCoordinate.y), 10, 10 };
+	Player(const std::string& avatarName, const Coordinate& coordinate, const Health& health, const Score& score, const std::vector<Projectile>& projectiles)
+		: myCoordinate{ coordinate }, myHealth{ health }, myScore{ score }, myProjectiles{ projectiles } {
+		myAvatar.load(avatarName);
+		myAvatar.resize(68, 42); 
+		myCollision = ofRectangle{ static_cast<float>(myCoordinate.x), static_cast<float>(myCoordinate.y), myAvatar.getWidth(), myAvatar.getHeight() };
 	}
 
 	void draw() {
 		ofSetColor(255);
-		myAvatar.setX(myCoordinate.x);
-		myAvatar.setY(myCoordinate.y);
-		ofDrawRectangle(myAvatar);
+		myAvatar.draw(myCoordinate.x, myCoordinate.y);
+		std::cout << myCollision.getCenter().x << ":" << myCoordinate.x << "\n";
 	}
 
 	void updateCoordinateX(const double deltaX) {
