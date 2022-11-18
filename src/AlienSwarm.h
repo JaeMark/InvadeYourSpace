@@ -40,9 +40,13 @@ public:
 		}
 	}
 
+	
+
 	void destroyAlien(const int n, const int m) {
 		mySwarm[n][m].destroy();
 		--numLivingAliens;
+		// speed up every 5 aliens destroyed
+		if(numLivingAliens % 5 == 0) speedUp();
 	}
 
 	bool isDestroyed() const {
@@ -150,5 +154,10 @@ private:
 		}
 		// return random alive alien
 		return aliveAliens[ofRandom(0, aliveAliens.size())].getCoordinate();
+	}
+
+	void speedUp() {
+		// speed up by 25%
+		mySpeed.x *= 1.25; 
 	}
 };
