@@ -38,12 +38,26 @@ public:
 
 	void update() {
 		myCoordinate.y += mySpeed;
-		collision.setY(myCoordinate.y);
+		if (ofGetRectMode() == OF_RECTMODE_CENTER) {
+			// ofRectangle intersect() doesn't seem to work with OF_RECTMODE_CENTER
+			collision.setX(myCoordinate.x - myAvatar.getWidth() / 2);
+			collision.setY(myCoordinate.y - myAvatar.getHeight() / 2);
+		}
+		else {
+			collision.setY(myCoordinate.y);
+		}
 	}
 
 	void update(const Coordinate coord) {
 		myCoordinate = coord;
-		collision.setX(coord.x);
-		collision.setY(coord.y);
+		if (ofGetRectMode() == OF_RECTMODE_CENTER) {
+			// ofRectangle intersect() doesn't seem to work with OF_RECTMODE_CENTER
+			collision.setX(coord.x - myAvatar.getWidth() / 2);
+			collision.setY(coord.y - myAvatar.getHeight() / 2);
+		}
+		else {
+			collision.setX(coord.x);
+			collision.setY(coord.y);
+		}
 	}
 };

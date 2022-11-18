@@ -51,11 +51,18 @@ public:
 		myCoordinate.x += changeInCoordinate.x;
 		myCoordinate.y += changeInCoordinate.y;
 		if (isAlienAlive) {
-			collision.setX(myCoordinate.x);
-			collision.setY(myCoordinate.y);
+			if (ofGetRectMode() == OF_RECTMODE_CENTER) {
+				// ofRectangle intersect() doesn't seem to work with OF_RECTMODE_CENTER
+				collision.setX(myCoordinate.x - myAvatar.getWidth() / 2);
+				collision.setY(myCoordinate.y - myAvatar.getHeight() / 2);
+			}
+			else {
+				collision.setX(myCoordinate.x);
+				collision.setY(myCoordinate.y);
+			}
 		} else {
-			collision.setX(-1);
-			collision.setY(-1);
+			collision.setX(-99);
+			collision.setY(-99);
 		}
 
 	}

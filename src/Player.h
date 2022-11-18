@@ -72,6 +72,7 @@ public:
 		if (ofGetRectMode() == OF_RECTMODE_CENTER) {
 			// ofRectangle intersect() doesn't seem to work with OF_RECTMODE_CENTER
 			myCollision.setX(myCoordinate.x - myAvatar.getWidth() / 2);
+			myCollision.setY(myCoordinate.y - myAvatar.getHeight() / 2);
 		} else {
 			myCollision.setX(myCoordinate.x);
 		}
