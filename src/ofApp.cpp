@@ -18,8 +18,8 @@ void ofApp::update() {
 	manageHeroCollisions();
 	manageLoseCondition();
 	manageWinCondition();
-
 	alienSwarm.update();
+	readyProjectiles();
 }
 
 //--------------------------------------------------------------
@@ -33,11 +33,11 @@ void ofApp::draw() {
 	// draw player projectiles
 	player.updateProjectiles();
 
-	// draw enemy projectiles
-	alienSwarm.drawProjectiles();
-
 	// draw alien swarm
 	alienSwarm.draw();
+
+	// draw enemy projectiles
+	alienSwarm.drawProjectiles();
 }
 
 //--------------------------------------------------------------
@@ -103,11 +103,11 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 }
 
-void ofApp::assignBomber() {
-	const float randomNumber = ofRandomf(); // random number from 0-1;
-	//if (randomNumber < attackProbability) {
+void ofApp::readyProjectiles() {
+	const float randomNumber = ofRandomuf(); // random number from 0-1;
+	if (randomNumber < attackProbability) {
 		alienSwarm.addProjectile();
-	//}
+	}
 }
 
 void ofApp::manageVerticalBoundaries() {

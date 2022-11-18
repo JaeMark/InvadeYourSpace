@@ -48,15 +48,14 @@ private:
 	Coordinate initialAlienSwarmSpeed{ 1, 5 };
 	std::vector<Projectile> alienProjectiles;
 	AlienSwarm alienSwarm{ AlienSwarm{alienRow, alienColumn, gridSize, leftBoundary, rightBoundary, initialAlienSwarmSpeed, alienProjectiles} };
-	const float attackProbability = 0.05;
+	const float attackProbability = 0.01;
 	const int enemyProjectileDamage = -1;
 
-	void assignBomber();
+	void readyProjectiles();
 	void manageVerticalBoundaries();
 	void manageHorizontalBoundaries();
 	void manageAlienCollisions();
 	void manageHeroCollisions();
 	void manageWinCondition() const;
 	void manageLoseCondition() const;
-;	bool isOnBoundary();
 };
