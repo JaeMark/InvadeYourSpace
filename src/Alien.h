@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Coordinate.h"
 #include "ofGraphics.h"
+#include "ofImage.h"
 #include "Projectile.h"
 
 class Alien {
@@ -8,32 +9,22 @@ public:
 	enum class Type{ bottom, middle, top };
 	ofRectangle collision;
 private:
+	ofImage myAvatar;
 	Coordinate myCoordinate;
 	Type myType;
 	bool isAlienAlive;
 public:
 	Alien(const Coordinate& coordinate, const Type& type)
 		: myCoordinate{ coordinate }, myType{ type } {
-		collision = ofRectangle{ static_cast<float>(myCoordinate.x), static_cast<float>(myCoordinate.y), 10, 10 };
+		setSprite();
+		collision = ofRectangle{ static_cast<float>(myCoordinate.x), static_cast<float>(myCoordinate.y), myAvatar.getWidth(), myAvatar.getHeight() };
 		isAlienAlive = true;
 	}
 
 
 	void draw() const {
-		switch(myType) {
-		case Type::bottom:
-			ofSetColor(255, 0, 0);
-			ofDrawCircle(myCoordinate.x, myCoordinate.y, 10);
-			break;
-		case Type::middle:
-			ofSetColor(0, 255, 0);
-			ofDrawCircle(myCoordinate.x, myCoordinate.y, 10);
-			break;
-		case Type::top:
-			ofSetColor(0, 0, 255);
-			ofDrawCircle(myCoordinate.x, myCoordinate.y, 10);
-			break;
-		}
+		ofSetColor(255);
+		myAvatar.draw(myCoordinate.x, myCoordinate.y);
 	}
 
 	int value() const {
@@ -79,5 +70,21 @@ public:
 
 	bool isAlive() const {
 		return isAlienAlive;
+	}
+
+private:
+	void setSprite() {
+		switch(myType) {
+		case Type::top:
+			myAvatar.load("Assets/yellowAlienShip.png");
+			break;
+		case Type::middle:
+			myAvatar.load("Assets/purpleAlienShip.png");
+			break;
+		case Type::bottom:
+			myAvatar.load("Assets/redAlienShip.png");
+			break;
+		}
+		myAvatar.resize(50, 50);
 	}
 };

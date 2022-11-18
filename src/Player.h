@@ -26,7 +26,6 @@ public:
 	void draw() {
 		ofSetColor(255);
 		myAvatar.draw(myCoordinate.x, myCoordinate.y);
-		std::cout << myCollision.getCenter().x << ":" << myCoordinate.x << "\n";
 	}
 
 	void updateCoordinateX(const double deltaX) {
