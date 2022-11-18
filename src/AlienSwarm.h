@@ -1,22 +1,73 @@
 ﻿#pragma once
 #include "Alien.h"
 #include "ofAppRunner.h"
+#include "ofMath.h"
 
 class AlienSwarm {
+private:
 	const int myRow;
 	const int myColumn;
 	const int myGridSize;
 	const int myLeftBoundary;
 	const int myRightBoundary;
-	std::vector<std::vector<Projectile>> myProjectiles;
+	Coordinate mySpeed;
+	std::vector<Projectile> myProjectiles;
 	std::vector<std::vector<Alien>> mySwarm;
+	int numLivingAliens;
 public:
-	AlienSwarm(const int& row, const int& column, const int& gridSize, const int& leftBoundary, const int& rightBoundary, const std::vector<std::vector<Projectile>>& projectiles)
-		: myRow{ row }, myColumn{ column }, myGridSize{ gridSize }, myLeftBoundary{ leftBoundary }, myRightBoundary{ rightBoundary }, myProjectiles{ projectiles } {
-		initalizeSwarm();
+	AlienSwarm(const int& row, const int& column, const int& gridSize, const int& leftBoundary, const int& rightBoundary, const Coordinate& initialSpeed, const std::vector<Projectile>& projectiles)
+		: myRow{ row }, myColumn{ column }, myGridSize{ gridSize }, myLeftBoundary{ leftBoundary }, myRightBoundary{ rightBoundary }, mySpeed{ initialSpeed }, myProjectiles { projectiles } {
+		initializeSwarm();
+		numLivingAliens = myRow * myColumn;
 	}
 
-	void initalizeSwarm() {
+	void draw() const {
+		for (auto& aliens : mySwarm) {
+			for (auto& alien : aliens) {
+				if (alien.isAlive()) {
+					alien.draw();
+				}
+			}
+		}
+	}
+
+	void update(bool moveDown) {
+		checkBoundary();
+		for (auto& aliens : mySwarm) {
+			for (auto& alien : aliens) {
+				if (moveDown) {
+					// move alien swarm down
+					alien.update({ mySpeed.x , mySpeed.y });
+				}
+				else {
+					alien.update({ mySpeed.x , 0 });
+				}
+			}
+		}
+	}
+
+	void destroyAlien(const int n, const int m) {
+		mySwarm[n][m].destroy();
+		--numLivingAliens;
+	}
+
+	bool isDestroyed() const {
+		return numLivingAliens == 0;
+	}
+
+	// Projectiles
+
+	void addProjectile() {
+		const Coordinate alienCoordinate = getAvailableAlienCoordinate();
+		myProjectiles.emplace_back(Projectile{ alienCoordinate, Projectile::Type::enemy });
+	}
+
+	void deleteProjectile(int index) {
+		myProjectiles.erase(myProjectiles.begin() + index);
+
+	}
+private:
+	void initializeSwarm() {
 		// create alien matrix
 		double alienPosX = 0;
 		double alienPosY = 0;
@@ -44,15 +95,29 @@ public:
 			mySwarm.push_back(aliens);
 		}
 	}
+
+	void checkBoundary() {
+		for (auto& aliens : mySwarm) {
+			for (auto& alien : aliens) {
+				if (alien.isOnBoundary(myLeftBoundary, myRightBoundary)) {
+					// change alien swarm direction
+					mySpeed.x *= -1;
+					return;
+				}
+			}
+		}
+	}
+
+	Coordinate getAvailableAlienCoordinate() {
+		std::vector<Alien> aliveAliens;
+		for (auto& aliens : mySwarm) {
+			for (auto& alien : aliens) {
+				if(alien.isAlive()) {
+					aliveAliens.push_back(alien);
+				}
+			}
+		}
+		// return random alive alien
+		return aliveAliens[ofRandom(0, aliveAliens.size())].getCoordinate();
+	}
 };
-/*
-const int alienRow{ 5 };
-const int alienColumn{ 11 };
-const int gridSize = 50;
-std::vector<vector<Alien>> alienSwarm;
-int numAliens{ alienRow * alienColumn };
-std::vector<int> alienBomberRow; // available bombers
-Projectile alienProjectile{ {0, 0}, Projectile::Type::enemy };
-bool isBomberAssigned = false;
-const int enemyProjectileDamage = -1
-*/
