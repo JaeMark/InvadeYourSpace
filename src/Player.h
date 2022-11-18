@@ -19,7 +19,7 @@ public:
 	Player(const std::string& avatarName, const Coordinate& coordinate, const Health& health, const Score& score, const std::vector<Projectile>& projectiles)
 		: myCoordinate{ coordinate }, myHealth{ health }, myScore{ score }, myProjectiles{ projectiles } {
 		myAvatar.load(avatarName);
-		myAvatar.resize(68, 42); 
+		myAvatar.resize(68, 42);
 		myCollision = ofRectangle{ static_cast<float>(myCoordinate.x), static_cast<float>(myCoordinate.y), myAvatar.getWidth(), myAvatar.getHeight() };
 	}
 
@@ -30,7 +30,11 @@ public:
 
 	void updateCoordinateX(const double deltaX) {
 		myCoordinate.x += deltaX;
-		myCollision.setX(myCoordinate.x);
+		if(ofGetRectMode() == OF_RECTMODE_CENTER) {
+			myCollision.setX(myCoordinate.x - myAvatar.getWidth() / 2);
+		} else {
+			myCollision.setX(myCoordinate.x);
+		}
 	}
 
 	void updateHealth(const int damage) {
@@ -65,7 +69,12 @@ public:
 
 	void setCoordinateX(const double x) {
 		myCoordinate.x = x;
-		myCollision.setX(myCoordinate.x);
+		if (ofGetRectMode() == OF_RECTMODE_CENTER) {
+			// ofRectangle intersect() doesn't seem to work with OF_RECTMODE_CENTER
+			myCollision.setX(myCoordinate.x - myAvatar.getWidth() / 2);
+		} else {
+			myCollision.setX(myCoordinate.x);
+		}
 	}
 
 	bool isOverlapping(const ofRectangle& otherCollision) const {

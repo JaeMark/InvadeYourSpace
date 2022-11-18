@@ -45,7 +45,7 @@ private:
 	const int alienRow{ 5 };
 	const int alienColumn{ 11 };
 	const int gridSize = 50;
-	Coordinate initialAlienSwarmSpeed{ 1, 10 };
+	Coordinate initialAlienSwarmSpeed{ 2, 15 };
 	std::vector<Projectile> alienProjectiles;
 	AlienSwarm alienSwarm{ AlienSwarm{alienRow, alienColumn, gridSize, leftBoundary, rightBoundary, initialAlienSwarmSpeed, alienProjectiles} };
 	const float attackProbability = 0.01;

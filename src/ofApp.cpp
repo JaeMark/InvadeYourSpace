@@ -7,19 +7,20 @@ void ofApp::setup(){
 	//ofSetWindowShape(750, 550);
 	ofSetRectMode(OF_RECTMODE_CENTER);
 
-	ofSetFrameRate(60);
+	ofSetFrameRate(24);
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	manageHorizontalBoundaries();
-	manageVerticalBoundaries();
-	manageAlienCollisions();
-	manageHeroCollisions();
 	manageLoseCondition();
 	manageWinCondition();
 	alienSwarm.update();
 	readyProjectiles();
+	manageAlienCollisions();
+	manageHeroCollisions();
+	manageHorizontalBoundaries();
+	manageVerticalBoundaries();
+
 }
 
 //--------------------------------------------------------------

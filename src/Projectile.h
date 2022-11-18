@@ -46,6 +46,4 @@ public:
 		collision.setX(coord.x);
 		collision.setY(coord.y);
 	}
-
-	//CLEAN UP PROJECTILES
 };
