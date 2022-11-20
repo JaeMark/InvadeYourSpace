@@ -110,13 +110,7 @@ void ofApp::readyProjectiles() {
 }
 
 void ofApp::cleanUpProjectiles() {
-	const std::vector<Projectile> playerProjectiles{ player.getProjectiles() };
-	for (int i{ 0 }; i < playerProjectiles.size(); i++) {
-		if(playerProjectiles[i].collision.getPosition().y < upperBoundary) {
-			// clean up projectiles out of bounds
-			player.destroyProjectile(i);
-		}
-	}
+	player.cleanUpProjectiles(0);
 	alienSwarm.cleanUpProjectiles(lowerBoundary);
 }
 

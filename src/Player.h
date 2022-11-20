@@ -60,6 +60,14 @@ public:
 		myProjectiles.erase(myProjectiles.begin() + index);
 	}
 
+	void cleanUpProjectiles(const int boundary) {
+		for (int i{ 0 }; i < myProjectiles.size(); i++) {
+			if (myProjectiles[i].collision.getPosition().y < boundary) {
+				destroyProjectile(i);
+			}
+		}
+	}
+
 	std::vector<Projectile> getProjectiles() {
 		return myProjectiles;
 	}
