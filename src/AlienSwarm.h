@@ -176,7 +176,9 @@ private:
 	}
 
 	void speedUp() {
-		// speed up by 25%
-		mySpeed.x *= 1.25; 
+		// speed up horizontally by 25%
+		mySpeed.x *= 1.25;
+		// speed up vertically by 10%
+		mySpeed.y *= 1.1;
 	}
 };

@@ -31,7 +31,6 @@ public:
 	}
 
 	void draw() {
-		ofSetColor(255);
 		update();
 		myAvatar.draw(myCoordinate.x, myCoordinate.y);
 	}

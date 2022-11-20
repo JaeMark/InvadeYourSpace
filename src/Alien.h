@@ -22,7 +22,6 @@ public:
 	}
 
 	void draw() const {
-		ofSetColor(255);
 		myAvatar.draw(myCoordinate.x, myCoordinate.y);
 	}
 
@@ -92,6 +91,6 @@ private:
 			myAvatar.load("Assets/redAlienShip.png");
 			break;
 		}
-		myAvatar.resize(50, 50);
+		myAvatar.resize(40, 40);
 	}
 };
