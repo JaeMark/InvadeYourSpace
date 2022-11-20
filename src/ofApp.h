@@ -52,8 +52,7 @@ private:
 	const int enemyProjectileDamage = -1;
 
 	void readyProjectiles();
-	void manageVerticalBoundaries();
-	void manageHorizontalBoundaries();
+	void cleanUpProjectiles();
 	void manageAlienCollisions();
 	void manageHeroCollisions();
 	void manageWinCondition() const;

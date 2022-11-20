@@ -28,8 +28,9 @@ public:
 		myAvatar.draw(myCoordinate.x, myCoordinate.y);
 	}
 
-	void updateCoordinateX(const double deltaX) {
+	void updateCoordinateX(const double deltaX, const int& leftBoundary, const int& rightBoundary) {
 		myCoordinate.x += deltaX;
+		myCoordinate.x = ofClamp(myCoordinate.x, leftBoundary, rightBoundary);
 		if(ofGetRectMode() == OF_RECTMODE_CENTER) {
 			myCollision.setX(myCoordinate.x - myAvatar.getWidth() / 2);
 		} else {
@@ -67,8 +68,9 @@ public:
 		return myCoordinate;
 	}
 
-	void setCoordinateX(const double x) {
+	void setCoordinateX(const double x, const int& leftBoundary, const int& rightBoundary) {
 		myCoordinate.x = x;
+		myCoordinate.x = ofClamp(myCoordinate.x, leftBoundary, rightBoundary);
 		if (ofGetRectMode() == OF_RECTMODE_CENTER) {
 			// ofRectangle intersect() doesn't seem to work with OF_RECTMODE_CENTER
 			myCollision.setX(myCoordinate.x - myAvatar.getWidth() / 2);

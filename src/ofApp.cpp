@@ -18,9 +18,7 @@ void ofApp::update() {
 	readyProjectiles();
 	manageAlienCollisions();
 	manageHeroCollisions();
-	manageHorizontalBoundaries();
-	manageVerticalBoundaries();
-
+	cleanUpProjectiles();
 }
 
 //--------------------------------------------------------------
@@ -44,10 +42,10 @@ void ofApp::draw() {
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 	if (key == 'a') {
-		player.updateCoordinateX(-heroMovementSpeed);
+		player.updateCoordinateX(-heroMovementSpeed, leftBoundary, rightBoundary);
 	}
 	if (key == 'd') {
-		player.updateCoordinateX(heroMovementSpeed);
+		player.updateCoordinateX(heroMovementSpeed, leftBoundary, rightBoundary);
 	}
 	if (key == 'w') {
 		player.addProjectile();
@@ -61,7 +59,7 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-	player.setCoordinateX(x);
+	player.setCoordinateX(x, leftBoundary, rightBoundary);
 }
 
 //--------------------------------------------------------------
@@ -111,7 +109,7 @@ void ofApp::readyProjectiles() {
 	}
 }
 
-void ofApp::manageVerticalBoundaries() {
+void ofApp::cleanUpProjectiles() {
 	const std::vector<Projectile> playerProjectiles{ player.getProjectiles() };
 	for (int i{ 0 }; i < playerProjectiles.size(); i++) {
 		if(playerProjectiles[i].collision.getPosition().y < upperBoundary) {
@@ -120,16 +118,6 @@ void ofApp::manageVerticalBoundaries() {
 		}
 	}
 	alienSwarm.cleanUpProjectiles(lowerBoundary);
-}
-
-void ofApp::manageHorizontalBoundaries() {
-	const double playerCoordinateX = player.getCoordinate().x;
-	if (playerCoordinateX < leftBoundary) {
-		player.setCoordinateX(leftBoundary);
-	}
-	if (playerCoordinateX > rightBoundary) {
-		player.setCoordinateX(rightBoundary);
-	}
 }
 
 void ofApp::manageAlienCollisions() {
