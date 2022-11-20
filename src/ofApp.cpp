@@ -21,6 +21,11 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
+	// draw dividing lines
+	const int offsetX = 30;
+	ofDrawLine(offsetX, upperBoundary, ofGetWidth() - offsetX, upperBoundary);
+	ofDrawLine(offsetX, lowerBoundary, ofGetWidth() - offsetX, lowerBoundary);
+
 	// draw player
 	player.draw();
 
@@ -101,7 +106,7 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 }
 
 void ofApp::cleanUpProjectiles() {
-	player.cleanUpProjectiles(0);
+	player.cleanUpProjectiles(upperBoundary);
 	alienSwarm.cleanUpProjectiles(lowerBoundary);
 }
 

@@ -30,12 +30,13 @@ class ofApp : public ofBaseApp{
 private:
 	const int leftBoundary = 100;
 	const int rightBoundary = ofGetWidth() - 100;
-	const int upperBoundary = 0;
-	const int lowerBoundary = ofGetHeight();
+	const int upperBoundary = 100;
+	const int lowerBoundary = ofGetHeight() - 100;
 
-	const double heroCoordinateY = 650;
+	const double heroCoordinateY = lowerBoundary - 50;
+	const double heroScoreCoordinateY = upperBoundary - 50;
 	Coordinate heroCoordinate{ static_cast<double>(ofGetWidth() / 2), heroCoordinateY };
-	Score heroScore{ 0 , Coordinate{static_cast<double>(ofGetWidth() / 2), 50}};
+	Score heroScore{ 0 , Coordinate{static_cast<double>(ofGetWidth() / 2), heroScoreCoordinateY}};
 	Health heroHealth{ 3 };
 	std::vector<Projectile> heroProjectiles;
 	Player player{ Player{ "Assets/playerShip.png", heroCoordinate, heroHealth, heroScore, heroProjectiles}};

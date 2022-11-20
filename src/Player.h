@@ -63,6 +63,8 @@ public:
 	}
 
 	void cleanUpProjectiles(const int boundary) {
+		// check if the upper edge of each projectile has reached the given boundary
+		// destroy the projectile if it has
 		for (int i{ 0 }; i < myProjectiles.size(); i++) {
 			if (myProjectiles[i].collision.getPosition().y < boundary) {
 				destroyProjectile(i);

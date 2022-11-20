@@ -20,6 +20,8 @@ public:
 		//ofDrawBitmapString("Player Score: " + ofToString(myScore), myPosition.x, myPosition.y);
 		ofSetColor(225);
 		myFont.drawString("verdana 30pt - ", myPosition.x, myPosition.y);
+
+		//ofDrawLine(30, myPosition.y + 50, ofGetWidth() - 30, myPosition.y + 50);
 		//myFont.drawString(typeStr, 30, 229);
 	}
 

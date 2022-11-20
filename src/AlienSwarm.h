@@ -95,8 +95,13 @@ public:
 	}
 
 	void cleanUpProjectiles(const int boundary) {
+		// clean up all projectiles that has reached the given boundary
 		for (int i{ 0 }; i < myProjectiles.size(); i++) {
-			if (myProjectiles[i].collision.getPosition().y > boundary) {
+			// find lower edge of the projectile collision
+			// myProjectiles[i].collision.getPosition().y will give the y value of the upper left corner of the collision
+			// so add the height of the collision to find the lower edge y value
+			const int lowerEdge = myProjectiles[i].collision.getPosition().y + myProjectiles[i].collision.getHeight();
+			if (lowerEdge > boundary) {
 				destroyProjectile(i);
 			}
 		}

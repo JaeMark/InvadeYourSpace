@@ -21,7 +21,6 @@ public:
 		isAlienAlive = true;
 	}
 
-
 	void draw() const {
 		ofSetColor(255);
 		myAvatar.draw(myCoordinate.x, myCoordinate.y);
