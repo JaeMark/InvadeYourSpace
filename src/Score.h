@@ -18,7 +18,7 @@ public:
 
 	void draw() const {
 		ofSetColor(225);
-		myFont.drawString("Player Score: " + ofToString(myScore), myPosition.x, myPosition.y);
+		myFont.drawString("PLAYER SCORE: " + ofToString(myScore), myPosition.x, myPosition.y + myFont.getLineHeight() / 2);
 	}
 
 	void update(int score) {

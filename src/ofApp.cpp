@@ -42,7 +42,10 @@ void ofApp::draw() {
 	player.draw();
 
 	// draw score
-	//heroScore.draw();
+	heroScore.draw();
+
+	// draw health
+	heroHealth.draw();
 
 	// draw player projectiles
 	player.updateProjectiles();
