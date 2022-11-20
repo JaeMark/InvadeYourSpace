@@ -32,9 +32,9 @@ private:
 	const int rightBoundary = ofGetWidth() - 100;
 	const int upperBoundary = 0;
 	const int lowerBoundary = ofGetHeight();
-		
-	Coordinate heroCoordinate{ static_cast<double>(ofGetWidth() / 2), 600.0 };
-	ofRectangle heroCollision = ofRectangle{ static_cast<float>(heroCoordinate.x), static_cast<float>(heroCoordinate.y), 20, 10 };
+
+	const double heroCoordinateY = 650;
+	Coordinate heroCoordinate{ static_cast<double>(ofGetWidth() / 2), heroCoordinateY };
 	Score heroScore{ 0 };
 	Health heroHealth{ 3 };
 	std::vector<Projectile> heroProjectiles;

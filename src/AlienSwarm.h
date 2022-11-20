@@ -102,6 +102,17 @@ public:
 		}
 	}
 
+	bool hasReached(const int& boundary) const {
+		for (auto& aliens : mySwarm) {
+			for (auto& alien : aliens) {
+				if (alien.isAlive() && alien.getCoordinate().y > boundary) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 private:
 	void initializeSwarm() {
 		// create alien matrix

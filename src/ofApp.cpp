@@ -4,9 +4,8 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	//ofSetWindowShape(750, 550);
 	ofSetRectMode(OF_RECTMODE_CENTER);
-
+	ofSetBackgroundColor(10);
 	ofSetFrameRate(24);
 }
 
@@ -136,7 +135,10 @@ void ofApp::manageWinCondition() const {
 	}
 }
 void ofApp::manageLoseCondition() const {
-	if (player.isDead()) {
+	// player loses if its life reaches 0
+	// player loses if the alien swarm has reached its location (minus a small offset)
+	const int loseBoundary{ static_cast<int>(heroCoordinateY - 50) }; 
+	if (player.isDead() || alienSwarm.hasReached(loseBoundary)) {
 		std::cout << "YOU LOSE!!" << "\n";
 	}
 }
