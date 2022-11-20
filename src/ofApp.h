@@ -9,7 +9,6 @@
 #include "Score.h"
 
 class ofApp : public ofBaseApp{
-
 	public:
 		void setup();
 		void update();
@@ -50,6 +49,8 @@ private:
 	AlienSwarm alienSwarm{ AlienSwarm{alienRow, alienColumn, gridSize, leftBoundary, rightBoundary, initialAlienSwarmSpeed, alienProjectiles} };
 	const float attackProbability = 0.01; // probability of an alien to attack each frame
 	const int enemyProjectileDamage = -1;
+
+	ofTrueTypeFont title;
 	
 	void cleanUpProjectiles();
 	void manageAlienCollisions();

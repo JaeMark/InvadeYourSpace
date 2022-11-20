@@ -5,7 +5,11 @@ void ofApp::setup(){
 	ofSetRectMode(OF_RECTMODE_CENTER);
 	ofSetBackgroundColor(10);
 	ofSetFrameRate(24);
+
 	ofTrueTypeFont::setGlobalDpi(72);
+	title.load("Blanka-Regular.ttf", 50, true, true);
+	title.setLineHeight(34.0f);
+	title.setLetterSpacing(1.035);
 }
 
 //--------------------------------------------------------------
@@ -21,16 +25,24 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
+	ofSetColor(225);
+
 	// draw dividing lines
 	const int offsetX = 30;
 	ofDrawLine(offsetX, upperBoundary, ofGetWidth() - offsetX, upperBoundary);
 	ofDrawLine(offsetX, lowerBoundary, ofGetWidth() - offsetX, lowerBoundary);
 
+	// draw game title
+	// align game title to the centre
+	const float titlePositionX = ofGetWidth() / 2 - 175; 
+	const float titlePositionY = upperBoundary / 2 + title.getLineHeight() / 2; 
+	title.drawString("SPACE INVADERS", titlePositionX, titlePositionY);
+
 	// draw player
 	player.draw();
 
 	// draw score
-	heroScore.draw();
+	//heroScore.draw();
 
 	// draw player projectiles
 	player.updateProjectiles();

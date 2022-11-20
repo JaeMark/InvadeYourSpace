@@ -1,28 +1,24 @@
 ﻿#pragma once
 #include <iostream>
 #include "Coordinate.h"
-#include "ofBitmapFont.h"
+#include "ofGraphics.h"
 #include "ofTrueTypeFont.h"
 
 class Score {
 	int myScore;
-	const Coordinate myPosition;
 	ofTrueTypeFont	myFont;
+	const Coordinate myPosition;
 public:
 	Score(const int& score, const Coordinate& position)
-		: myScore{ score }, myPosition{ position } {
-		myFont.load("verdana.ttf", 30, true, true);
+		: myScore{ score }, myPosition { position } {
+		myFont.load("Blanka-Regular.ttf", 30, true, true);
 		myFont.setLineHeight(34.0f);
 		myFont.setLetterSpacing(1.035);
 	}
 
-	void draw() {
-		//ofDrawBitmapString("Player Score: " + ofToString(myScore), myPosition.x, myPosition.y);
+	void draw() const {
 		ofSetColor(225);
-		myFont.drawString("verdana 30pt - ", myPosition.x, myPosition.y);
-
-		//ofDrawLine(30, myPosition.y + 50, ofGetWidth() - 30, myPosition.y + 50);
-		//myFont.drawString(typeStr, 30, 229);
+		myFont.drawString("Player Score: " + ofToString(myScore), myPosition.x, myPosition.y);
 	}
 
 	void update(int score) {
