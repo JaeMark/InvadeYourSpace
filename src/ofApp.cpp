@@ -14,11 +14,11 @@ void ofApp::setup(){
 void ofApp::update() {
 	manageLoseCondition();
 	manageWinCondition();
+	cleanUpProjectiles();
 	alienSwarm.update();
-	readyProjectiles();
+	alienSwarm.loadProjectile(attackProbability);
 	manageAlienCollisions();
 	manageHeroCollisions();
-	cleanUpProjectiles();
 }
 
 //--------------------------------------------------------------
@@ -100,13 +100,6 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
-}
-
-void ofApp::readyProjectiles() {
-	const float randomNumber = ofRandomuf(); // random number from 0-1;
-	if (randomNumber < attackProbability) {
-		alienSwarm.addProjectile();
-	}
 }
 
 void ofApp::cleanUpProjectiles() {

@@ -73,9 +73,12 @@ public:
 		}
 	}
 
-	void addProjectile() {
-		const Coordinate alienCoordinate = getAvailableAlienCoordinate();
-		myProjectiles.emplace_back(Projectile{ alienCoordinate, Projectile::Type::enemy });
+	void loadProjectile(const float& loadProbability) {
+		const float randomNumber = ofRandomuf(); // random number from 0-1;
+		if (randomNumber < loadProbability) {
+			const Coordinate alienCoordinate = getAvailableAlienCoordinate();
+			myProjectiles.emplace_back(Projectile{ alienCoordinate, Projectile::Type::enemy });
+		}
 	}
 
 	void destroyProjectile(int index) {

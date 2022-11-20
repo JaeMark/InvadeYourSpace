@@ -41,17 +41,15 @@ private:
 	Player player{ Player{ "Assets/playerShip.png", heroCoordinate, heroHealth, heroScore, heroProjectiles}};
 	const int heroMovementSpeed = 10;
 
-
 	const int alienRow{ 5 };
 	const int alienColumn{ 11 };
 	const int gridSize = 50;
 	Coordinate initialAlienSwarmSpeed{ 2, 15 };
 	std::vector<Projectile> alienProjectiles;
 	AlienSwarm alienSwarm{ AlienSwarm{alienRow, alienColumn, gridSize, leftBoundary, rightBoundary, initialAlienSwarmSpeed, alienProjectiles} };
-	const float attackProbability = 0.01;
+	const float attackProbability = 0.01; // probability of an alien to attack each frame
 	const int enemyProjectileDamage = -1;
-
-	void readyProjectiles();
+	
 	void cleanUpProjectiles();
 	void manageAlienCollisions();
 	void manageHeroCollisions();
