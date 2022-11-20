@@ -53,7 +53,9 @@ public:
 	}
 
 	void addProjectile() {
-		myProjectiles.emplace_back(Projectile{ myCoordinate, Projectile::Type::friendly });
+		// weapon is located at the middle front of the ship
+		const Coordinate weaponCoordinate{ myCoordinate.x, myCoordinate.y - myAvatar.getHeight() / 2 };
+		myProjectiles.emplace_back(Projectile{ weaponCoordinate, Projectile::Type::friendly });
 	}
 
 	void destroyProjectile(int index) {

@@ -105,7 +105,7 @@ public:
 	bool hasReached(const int& boundary) const {
 		for (auto& aliens : mySwarm) {
 			for (auto& alien : aliens) {
-				if (alien.isAlive() && alien.getCoordinate().y > boundary) {
+				if (alien.isAlive() && alien.getWeaponCoordinate().y > boundary) {
 					return true;
 				}
 			}
@@ -119,7 +119,7 @@ private:
 		double alienPosX = 0;
 		double alienPosY = 0;
 		const double gridInitialPosX = ofGetWidth() / 2 - myGridSize * myRow;
-		const double gridInitialPosY = 100;
+		const double gridInitialPosY = 150;
 		Alien::Type alienType;
 		for (int n{ 0 }; n < myRow; n++) {
 			std::vector<Alien> aliens;
@@ -167,7 +167,7 @@ private:
 			}
 		}
 		// return random alive alien
-		return aliveAliens[ofRandom(0, aliveAliens.size())].getCoordinate();
+		return aliveAliens[ofRandom(0, aliveAliens.size())].getWeaponCoordinate();
 	}
 
 	void speedUp() {

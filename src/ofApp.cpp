@@ -1,12 +1,11 @@
 #include "ofApp.h"
 
-#include "Projectile.h"
-
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofSetRectMode(OF_RECTMODE_CENTER);
 	ofSetBackgroundColor(10);
 	ofSetFrameRate(24);
+	ofTrueTypeFont::setGlobalDpi(72);
 }
 
 //--------------------------------------------------------------
@@ -114,6 +113,7 @@ void ofApp::manageAlienCollisions() {
 					player.updateScore(alienSwarm.getAlienScore(n, m));
 					player.destroyProjectile(j);
 					alienSwarm.destroyAlien(n, m);
+					heroScore.update(alienSwarm.getAlienScore(n, m));
 				}
 			}
 		}

@@ -35,7 +35,7 @@ private:
 
 	const double heroCoordinateY = 650;
 	Coordinate heroCoordinate{ static_cast<double>(ofGetWidth() / 2), heroCoordinateY };
-	Score heroScore{ 0 };
+	Score heroScore{ 0 , Coordinate{static_cast<double>(ofGetWidth() / 2), 50}};
 	Health heroHealth{ 3 };
 	std::vector<Projectile> heroProjectiles;
 	Player player{ Player{ "Assets/playerShip.png", heroCoordinate, heroHealth, heroScore, heroProjectiles}};

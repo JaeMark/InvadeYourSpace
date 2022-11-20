@@ -43,8 +43,9 @@ public:
 		return alienValue;
 	}
 
-	Coordinate getCoordinate() const {
-		return myCoordinate;
+	Coordinate getWeaponCoordinate() const {
+		// weapon is located at the middle front of the ship
+		return Coordinate{ myCoordinate.x, myCoordinate.y + myAvatar.getHeight() / 2 };
 	}
 
 	void update(Coordinate changeInCoordinate) {
