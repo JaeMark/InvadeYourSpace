@@ -53,7 +53,7 @@ public:
 		myScore.update(deltaScore);
 	}
 
-	void updateProjectiles() {
+	void drawProjectiles() {
 		for (auto& projectile : myProjectiles) {
 			projectile.draw();
 		}
