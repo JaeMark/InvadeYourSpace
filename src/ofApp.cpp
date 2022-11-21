@@ -66,13 +66,12 @@ void ofApp::draw() {
 
 	// handle game states
 	switch(gameState) {
-		case GameState::start: {
+		case GameState::start: 
 			// draw game instructions
 			drawInstruction();
 			// draw start button
 			drawStartButton();
 			break;
-		}
 		case GameState::playing: 
 			// draw player
 			player.drawPlayer();
@@ -212,11 +211,9 @@ void ofApp::drawEndScreen() const {
 		resultStr = victoryStr;
 	}
 	const ofRectangle resultBounds = instructions.getStringBoundingBox(resultStr, ofGetWidth() / 2, ofGetHeight() / 2);
-	const float resultBoundsPosX = ofGetWidth() / 2 - resultBounds.width / 2;
+	const float resultBoundsPosX = ofGetWidth() / 2 - resultBounds.width * 2;
 	const float resultBoundsPosY = ofGetHeight() / 2 + resultBounds.height;
 	ofSetColor(255);
-	ofDrawRectangle(resultBounds.x, resultBounds.y, ofGetWidth() - 60, lowerBoundary - upperBoundary);
-	ofSetColor(10);
 	gameResult.drawString(resultStr, resultBoundsPosX, resultBoundsPosY);
 }
 

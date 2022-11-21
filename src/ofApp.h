@@ -54,7 +54,7 @@ private:
 
 	ofTrueTypeFont gameResult;
 	const std::string victoryStr{ "You Win!" };
-	const std::string gameOverStr{ "Game Over" };
+	const std::string gameOverStr{ "Game Over!" };
 
 	const int leftBoundary{ 100 };
 	const int rightBoundary{ ofGetWidth() - 100 };
@@ -66,7 +66,8 @@ private:
 	Score heroScore{ 0 , Coordinate{30, (static_cast<double>(ofGetHeight()) + lowerBoundary) / 2}};
 	Health heroHealth{ 3, Coordinate{static_cast<double>(ofGetWidth()) - 210, (static_cast<double>(ofGetHeight()) + lowerBoundary) / 2} };
 	std::vector<Projectile> heroProjectiles;
-	Player player{ Player{ "Assets/playerShip.png", heroCoordinate, heroHealth, heroScore, heroProjectiles}};
+	std::string playerAvatarStr{ "Assets/playerShip.png" };
+	Player player{ Player{ playerAvatarStr, heroCoordinate, heroHealth, heroScore, heroProjectiles}};
 	const int heroMovementSpeed{ 20 };
 
 	const int alienRow{ 5 };
@@ -77,7 +78,7 @@ private:
 	AlienSwarm alienSwarm{ AlienSwarm{alienRow, alienColumn, gridSize, leftBoundary, rightBoundary, initialAlienSwarmSpeed, alienProjectiles} };
 	const float attackProbability{ 0.01 }; // probability of an alien to attack each frame
 	const int enemyProjectileDamage{ -1 };
-
+	
 	void drawInstruction() const;
 	void drawStartButton() const;
 	void drawEndScreen() const;
