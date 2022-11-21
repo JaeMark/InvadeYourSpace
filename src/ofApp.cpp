@@ -19,13 +19,16 @@ void ofApp::setup(){
 	instructions.load("Blanka-Regular.ttf", 20, true, true);
 	instructions.setLineHeight(lineHeight);
 	instructions.setLetterSpacing(letterSpacing);
-	// button
-	start = ofRectangle(ofGetWidth() / 2, ofGetHeight() / 2 + 200, 100, 50);
+	// start button
+	startFont.load("Blanka-Regular.ttf", 30, true, true);
+	startFont.setLineHeight(lineHeight);
+	startFont.setLetterSpacing(letterSpacing);
+	startButton = ofRectangle(ofGetWidth() / 2, ofGetHeight() / 2 + 200, 200, 65);
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	if(gameState == GameState::playing) {
+	if (gameState == GameState::playing) {
 		manageLoseCondition();
 		manageWinCondition();
 		cleanUpProjectiles();
@@ -33,7 +36,7 @@ void ofApp::update() {
 		alienSwarm.loadProjectile(attackProbability);
 		manageAlienCollisions();
 		manageHeroCollisions();
-	}
+	} 
 }
 
 //--------------------------------------------------------------
@@ -60,11 +63,13 @@ void ofApp::draw() {
 	// handle game states
 	switch(gameState) {
 		case GameState::start: {
+			// draw game instructions
 			drawInstruction();
-			ofDrawRectangle(start);
+			// draw start button
+			drawStartButton();
 			break;
 		}
-		case GameState::playing: {
+		case GameState::playing: 
 			// draw player
 			player.drawPlayer();
 			// draw player projectiles
@@ -74,17 +79,14 @@ void ofApp::draw() {
 			// draw enemy projectiles
 			alienSwarm.drawProjectiles();
 			break;
-		}
-		case GameState::won: {
+		case GameState::won: 
 			// draw player
 			player.drawPlayer();
 			break;
-		}
-		case GameState::lost: {
+		case GameState::lost: 
 			// draw alien swarm
 			alienSwarm.draw();
 			break;
-		}
 	}
 }
 
@@ -100,7 +102,7 @@ void ofApp::keyPressed(int key){
 		if (key == 'w') {
 			player.addProjectile();
 		}
-	}
+	} 
 }
 
 //--------------------------------------------------------------
@@ -112,6 +114,14 @@ void ofApp::keyReleased(int key){
 void ofApp::mouseMoved(int x, int y ){
 	if(gameState == GameState::playing) {
 		player.setCoordinateX(x, leftBoundary, rightBoundary);
+	} else if (gameState == GameState::start) {
+		if (startButton.inside(x + startButton.width / 2, y + startButton.height / 2)) {
+			startButtonColor = ofColor::darkGrey;
+			isButtonHovered = true;
+		} else {
+			startButtonColor = ofColor::white;
+			isButtonHovered = false;
+		}
 	}
 }
 
@@ -124,6 +134,10 @@ void ofApp::mouseDragged(int x, int y, int button){
 void ofApp::mousePressed(int x, int y, int button){
 	if (gameState == GameState::playing) {
 		player.addProjectile();
+	} else if (gameState == GameState::start) {
+		if(isButtonHovered) {
+			gameState = GameState::playing;
+		}
 	}
 }
 
@@ -171,6 +185,16 @@ void ofApp::drawInstruction() const {
 	const float instrTitlePositionY = (instrPositionY + upperBoundary) / 2;
 	ofSetColor(255);
 	instructionsTitle.drawString(instructionsTitleStr, instrTitlePositionX, instrTitlePositionY);
+}
+
+void ofApp::drawStartButton() const {
+	ofRectangle startBounds = startFont.getStringBoundingBox(startStr, 0, 0);
+	const float startStrPosX = startButton.x - startBounds.width / 2;
+	const float startStrPosY = startButton.y + startBounds.height / 2;
+	ofSetColor(startButtonColor);
+	ofDrawRectangle(startButton);
+	ofSetColor(10);
+	startFont.drawString(startStr, startStrPosX, startStrPosY);
 }
 
 void ofApp::cleanUpProjectiles() {
