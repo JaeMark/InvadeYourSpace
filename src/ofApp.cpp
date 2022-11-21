@@ -6,11 +6,21 @@ void ofApp::setup(){
 	ofSetBackgroundColor(10);
 	ofSetFrameRate(24);
 
-	// setup title font
 	ofTrueTypeFont::setGlobalDpi(72);
+	// setup title font
 	title.load("Blanka-Regular.ttf", 50, true, true);
-	title.setLineHeight(34.0f);
-	title.setLetterSpacing(1.035);
+	title.setLineHeight(lineHeight);
+	title.setLetterSpacing(letterSpacing);
+	// instructions title font
+	instructionsTitle.load("Blanka-Regular.ttf", 50, true, true);
+	instructionsTitle.setLineHeight(lineHeight);
+	instructionsTitle.setLetterSpacing(letterSpacing);
+	// instructions font
+	instructions.load("Blanka-Regular.ttf", 20, true, true);
+	instructions.setLineHeight(lineHeight);
+	instructions.setLetterSpacing(letterSpacing);
+	// button
+	start = ofRectangle(ofGetWidth() / 2, ofGetHeight() / 2 + 200, 100, 50);
 }
 
 //--------------------------------------------------------------
@@ -36,9 +46,11 @@ void ofApp::draw() {
 	ofDrawLine(offsetX, lowerBoundary, ofGetWidth() - offsetX, lowerBoundary);
 
 	// draw game title; align game title to the centre
-	const float titlePositionX = ofGetWidth() / 2 - 175; 
-	const float titlePositionY = upperBoundary / 2 + title.getLineHeight() / 2; 
-	title.drawString("SPACE INVADERS", titlePositionX, titlePositionY);
+	ofRectangle titleBounds = title.getStringBoundingBox(titleStr, 0, 0);
+	const float titlePosX = ofGetWidth() / 2 - titleBounds.width / 2;
+	const float titlePosY = upperBoundary / 2 + titleBounds.height / 2;
+	title.drawString(titleStr, titlePosX, titlePosY);
+	ofDrawRectangle(titleBounds);
 
 	// draw score
 	player.drawScore();
@@ -47,27 +59,32 @@ void ofApp::draw() {
 
 	// handle game states
 	switch(gameState) {
-	case GameState::start:
-		break;
-	case GameState::playing:
-		// draw player
-		player.drawPlayer();
-		// draw player projectiles
-		player.drawProjectiles();
-		// draw alien swarm
-		alienSwarm.draw();
-		// draw enemy projectiles
-		alienSwarm.drawProjectiles();
-		break;
-	case GameState::won:
-		// draw player
-		player.drawPlayer();
-
-		break;
-	case GameState::lost:
-		// draw alien swarm
-		alienSwarm.draw();
-		break;
+		case GameState::start: {
+			drawInstruction();
+			ofDrawRectangle(start);
+			break;
+		}
+		case GameState::playing: {
+			// draw player
+			player.drawPlayer();
+			// draw player projectiles
+			player.drawProjectiles();
+			// draw alien swarm
+			alienSwarm.draw();
+			// draw enemy projectiles
+			alienSwarm.drawProjectiles();
+			break;
+		}
+		case GameState::won: {
+			// draw player
+			player.drawPlayer();
+			break;
+		}
+		case GameState::lost: {
+			// draw alien swarm
+			alienSwarm.draw();
+			break;
+		}
 	}
 }
 
@@ -138,6 +155,22 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
+}
+
+void ofApp::drawInstruction() const {
+	const ofRectangle instrBounds = instructions.getStringBoundingBox(instructionsStr, ofGetWidth() / 2, ofGetHeight() / 2);
+	const float instrPositionX = ofGetWidth() / 2 - instrBounds.width / 2;
+	const float instrPositionY = ofGetHeight() / 2 - instrBounds.height / 2;
+	ofSetColor(255);
+	// draw a border around the instructions
+	ofDrawRectangle(instrBounds.x, instrBounds.y, ofGetWidth() - 60, instrBounds.height * 1.1);
+	ofSetColor(10);
+	instructions.drawString(instructionsStr, instrPositionX, instrPositionY);
+	const ofRectangle instrTitleBounds = instructionsTitle.getStringBoundingBox(instructionsTitleStr, 0, 0);
+	const float instrTitlePositionX = ofGetWidth() / 2 - instrTitleBounds.width / 2;
+	const float instrTitlePositionY = (instrPositionY + upperBoundary) / 2;
+	ofSetColor(255);
+	instructionsTitle.drawString(instructionsTitleStr, instrTitlePositionX, instrTitlePositionY);
 }
 
 void ofApp::cleanUpProjectiles() {

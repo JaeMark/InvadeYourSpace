@@ -26,9 +26,27 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 private:
 	enum class GameState { start, playing, won, lost };
-	GameState gameState{ GameState::playing }; // default game state
+	GameState gameState{ GameState::start }; // default game state
 
 	ofTrueTypeFont title;
+	ofTrueTypeFont instructionsTitle;
+	ofTrueTypeFont instructions;
+	const std::string titleStr = "INVADE YOUR SPACE";
+	const std::string instructionsTitleStr = "INSTRUCTIONS";
+	const std::string instructionsStr =
+		"CONTROLS:   Press A or Move Mouse to the Left to Move Left\n"
+		"\t\t\t\t\t\t Press D or Move Mouse to the Right to Move Right\n"
+		"\t\t\t\t\t\t Press W or Press Mouse to Fire Projectile\n"
+		"SCORE:\t\t   10 points for each alien in the bottom two rows\n"
+		"\t\t\t\t\t\t20 points for each alien in the next two rows up\n"
+		"\t\t\t\t\t\t30 points for each alien in the top row\n"
+		"VICTORY:\t  Destroy All Alien Ships.\n"
+		"GAME OVER: The Alien Swarm Has Reached the Location of the Player\n"
+		"\t\t\t\t\t\tThe Player is Damaged 3 Times\n";
+	const float lineHeight = 34.0;
+	const float letterSpacing = 1.035;
+
+	ofRectangle start;
 
 	const int leftBoundary = 100;
 	const int rightBoundary = ofGetWidth() - 100;
@@ -52,6 +70,7 @@ private:
 	const float attackProbability = 0.01; // probability of an alien to attack each frame
 	const int enemyProjectileDamage = -1;
 
+	void drawInstruction() const;
 	void cleanUpProjectiles();
 	void manageAlienCollisions();
 	void manageHeroCollisions();
