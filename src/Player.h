@@ -23,8 +23,16 @@ public:
 		myCollision = ofRectangle{ static_cast<float>(myCoordinate.x), static_cast<float>(myCoordinate.y), myAvatar.getWidth(), myAvatar.getHeight() };
 	}
 
-	void draw() {
+	void drawPlayer() const {
 		myAvatar.draw(myCoordinate.x, myCoordinate.y);
+	}
+
+	void drawScore() const {
+		myScore.draw();
+	}
+
+	void drawHealth() {
+		myHealth.draw();
 	}
 
 	void updateCoordinateX(const double deltaX, const int& leftBoundary, const int& rightBoundary) {

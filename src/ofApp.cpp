@@ -39,13 +39,13 @@ void ofApp::draw() {
 	title.drawString("SPACE INVADERS", titlePositionX, titlePositionY);
 
 	// draw player
-	player.draw();
+	player.drawPlayer();
 
 	// draw score
-	heroScore.draw();
+	player.drawScore();
 
 	// draw health
-	heroHealth.draw();
+	player.drawHealth();
 
 	// draw player projectiles
 	player.updateProjectiles();
@@ -133,7 +133,6 @@ void ofApp::manageAlienCollisions() {
 					player.updateScore(alienSwarm.getAlienScore(n, m));
 					player.destroyProjectile(j);
 					alienSwarm.destroyAlien(n, m);
-					heroScore.update(alienSwarm.getAlienScore(n, m));
 				}
 			}
 		}

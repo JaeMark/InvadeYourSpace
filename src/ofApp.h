@@ -36,7 +36,7 @@ private:
 	const double heroScoreCoordinateY = upperBoundary - 50;
 	Coordinate heroCoordinate{ static_cast<double>(ofGetWidth() / 2), heroCoordinateY };
 	Score heroScore{ 0 , Coordinate{30, (static_cast<double>(ofGetHeight()) + lowerBoundary) / 2}};
-	Health heroHealth{ 3, Coordinate{230, (static_cast<double>(ofGetHeight()) + lowerBoundary) / 2} };
+	Health heroHealth{ 3, Coordinate{static_cast<double>(ofGetWidth()) - 210, (static_cast<double>(ofGetHeight()) + lowerBoundary) / 2} };
 	std::vector<Projectile> heroProjectiles;
 	Player player{ Player{ "Assets/playerShip.png", heroCoordinate, heroHealth, heroScore, heroProjectiles}};
 	const int heroMovementSpeed = 20;
