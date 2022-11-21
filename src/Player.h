@@ -3,6 +3,7 @@
 #include "Health.h"
 #include "ofImage.h"
 #include "ofRectangle.h"
+#include "ofSoundPlayer.h"
 #include "Projectile.h"
 #include "Score.h"
 
@@ -15,12 +16,14 @@ private:
 	Health myHealth;
 	Score myScore;
 	std::vector<Projectile> myProjectiles;
+	ofSoundPlayer myHitAudio;
 public:
 	Player(const std::string& avatarName, const Coordinate& coordinate, const Health& health, const Score& score, const std::vector<Projectile>& projectiles)
 		: myCoordinate{ coordinate }, myHealth{ health }, myScore{ score }, myProjectiles{ projectiles } {
 		myAvatar.load(avatarName);
 		myAvatar.resize(68, 42);
 		myCollision = ofRectangle{ static_cast<float>(myCoordinate.x), static_cast<float>(myCoordinate.y), myAvatar.getWidth(), myAvatar.getHeight() };
+		myHitAudio.load("Audio/playerHitAudio.mp3");
 	}
 
 	void drawPlayer() const {
@@ -47,6 +50,8 @@ public:
 
 	void updateHealth(const int damage) {
 		myHealth.loseHealth(damage);
+		myHitAudio.play();
+
 	}
 
 	void updateScore(const int deltaScore) {

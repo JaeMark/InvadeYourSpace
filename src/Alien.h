@@ -2,6 +2,7 @@
 #include "Coordinate.h"
 #include "ofGraphics.h"
 #include "ofImage.h"
+#include "ofSoundPlayer.h"
 #include "Projectile.h"
 
 class Alien {
@@ -13,12 +14,14 @@ private:
 	Coordinate myCoordinate;
 	Type myType;
 	bool isAlienAlive;
+	ofSoundPlayer myDestructionAudio;
 public:
 	Alien(const Coordinate& coordinate, const Type& type)
 		: myCoordinate{ coordinate }, myType{ type } {
 		setSprite();
 		collision = ofRectangle{ static_cast<float>(myCoordinate.x), static_cast<float>(myCoordinate.y), myAvatar.getWidth(), myAvatar.getHeight() };
 		isAlienAlive = true;
+		myDestructionAudio.load("Audio/alienShipExplosion.mp3");
 	}
 
 	void draw() const {
@@ -72,6 +75,7 @@ public:
 
 	void destroy() {
 		isAlienAlive = false;
+		myDestructionAudio.play();
 	}
 
 	bool isAlive() const {
