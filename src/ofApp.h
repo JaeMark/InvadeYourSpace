@@ -1,10 +1,8 @@
 #pragma once
 
-#include "ofMain.h"
-#include "ofxGui.h"
-
 #include "AlienSwarm.h"
 #include "Health.h"
+#include "ofMain.h"
 #include "Player.h"
 #include "Projectile.h"
 #include "Score.h"
