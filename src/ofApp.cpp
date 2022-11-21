@@ -28,6 +28,23 @@ void ofApp::setup(){
 	gameResult.load("Blanka-Regular.ttf", 75, true, true);
 	gameResult.setLineHeight(lineHeight);
 	gameResult.setLetterSpacing(letterSpacing);
+
+	// game intro music
+	introAudio.load("Audio/introMusic.mp3");
+	introAudio.setVolume(0.75);
+	// game start audio
+	gameStartAudio.load("Audio/gameStartAudio.mp3");
+	gameStartAudio.setVolume(0.75);
+	// background music 
+	backgroundAudio.load("Audio/backgroundMusic.mp3");
+	backgroundAudio.setVolume(0.75);
+	backgroundAudio.setLoop(true);
+	// victory audio
+	victoryAudio.load("Audio/victoryAudio.mp3");
+	victoryAudio.setVolume(0.75);
+	// game over audio
+	gameOverAudio.load("Audio/gameOverAudio.mp3");
+	gameOverAudio.setVolume(0.75);
 }
 
 //--------------------------------------------------------------
@@ -40,13 +57,16 @@ void ofApp::update() {
 		alienSwarm.loadProjectile(attackProbability);
 		manageAlienCollisions();
 		manageHeroCollisions();
-	} 
+	}
+	// update the sound playing system
+	ofSoundUpdate();
+	
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() {
 	ofSetColor(225);
-
+	
 	// draw border lines
 	const int offsetX = 30;
 	ofDrawLine(offsetX, upperBoundary, ofGetWidth() - offsetX, upperBoundary);
@@ -66,11 +86,13 @@ void ofApp::draw() {
 
 	// handle game states
 	switch(gameState) {
-		case GameState::start: 
+		case GameState::startScreen: 
 			// draw game instructions
 			drawInstruction();
 			// draw start button
 			drawStartButton();
+			// player intro music
+			if(!introAudio.isPlaying()) introAudio.play();
 			break;
 		case GameState::playing: 
 			// draw player
@@ -82,14 +104,30 @@ void ofApp::draw() {
 			// draw enemy projectiles
 			alienSwarm.drawProjectiles();
 			break;
-		case GameState::won: 
+		case GameState::won:
+			// stop background music
+			backgroundAudio.stop();
+			// play victory audio
+			if (!victoryAudio.isPlaying() && !isVictoryAudioPlayed) {
+				victoryAudio.play();
+				isVictoryAudioPlayed = true;
+			}
 			// draw player
 			player.drawPlayer();
+			// draw end screen
 			drawEndScreen();
 			break;
-		case GameState::lost: 
+		case GameState::lost:
+			// stop background music
+			backgroundAudio.stop();
+			// play game over audio
+			if (!gameOverAudio.isPlaying() && !isGameOverAudioPlayed) {
+				gameOverAudio.play();
+				isGameOverAudioPlayed = true;
+			}
 			// draw alien swarm
 			alienSwarm.draw();
+			// draw end screen
 			drawEndScreen();
 			break;
 	}
@@ -119,7 +157,7 @@ void ofApp::keyReleased(int key){
 void ofApp::mouseMoved(int x, int y ){
 	if(gameState == GameState::playing) {
 		player.setCoordinateX(x, leftBoundary, rightBoundary);
-	} else if (gameState == GameState::start) {
+	} else if (gameState == GameState::startScreen) {
 		if (startButton.inside(x + startButton.width / 2, y + startButton.height / 2)) {
 			startButtonColor = ofColor::darkGrey;
 			isButtonHovered = true;
@@ -139,8 +177,10 @@ void ofApp::mouseDragged(int x, int y, int button){
 void ofApp::mousePressed(int x, int y, int button){
 	if (gameState == GameState::playing) {
 		player.addProjectile();
-	} else if (gameState == GameState::start) {
+	} else if (gameState == GameState::startScreen) {
 		if(isButtonHovered) {
+			gameStartAudio.play();
+			backgroundAudio.play();
 			gameState = GameState::playing;
 		}
 	}
@@ -211,7 +251,7 @@ void ofApp::drawEndScreen() const {
 		resultStr = victoryStr;
 	}
 	const ofRectangle resultBounds = instructions.getStringBoundingBox(resultStr, ofGetWidth() / 2, ofGetHeight() / 2);
-	const float resultBoundsPosX = ofGetWidth() / 2 - resultBounds.width * 2;
+	const float resultBoundsPosX = ofGetWidth() / 2 - resultBounds.width * 1.75;
 	const float resultBoundsPosY = ofGetHeight() / 2 + resultBounds.height;
 	ofSetColor(255);
 	gameResult.drawString(resultStr, resultBoundsPosX, resultBoundsPosY);

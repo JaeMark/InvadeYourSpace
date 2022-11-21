@@ -25,8 +25,8 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 private:
-	enum class GameState { start, playing, won, lost };
-	GameState gameState{ GameState::start }; // default game state
+	enum class GameState { startScreen, playing, won, lost };
+	GameState gameState{ GameState::startScreen }; // default game state
 
 	ofTrueTypeFont title;
 	ofTrueTypeFont instructionsTitle;
@@ -53,8 +53,16 @@ private:
 	bool isButtonHovered = false;
 
 	ofTrueTypeFont gameResult;
-	const std::string victoryStr{ "You Win!" };
-	const std::string gameOverStr{ "Game Over!" };
+	const std::string victoryStr{ "Mission Complete!" };
+	const std::string gameOverStr{ "Mission Failed!" };
+
+	ofSoundPlayer introAudio;
+	ofSoundPlayer gameStartAudio;
+	ofSoundPlayer backgroundAudio;
+	ofSoundPlayer victoryAudio;
+	ofSoundPlayer gameOverAudio;
+	bool isVictoryAudioPlayed = false;
+	bool isGameOverAudioPlayed = false;
 
 	const int leftBoundary{ 100 };
 	const int rightBoundary{ ofGetWidth() - 100 };
