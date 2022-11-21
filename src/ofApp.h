@@ -52,6 +52,10 @@ private:
 	const std::string startStr{ "START" };
 	bool isButtonHovered = false;
 
+	ofTrueTypeFont gameResult;
+	const std::string victoryStr{ "You Win!" };
+	const std::string gameOverStr{ "Game Over" };
+
 	const int leftBoundary{ 100 };
 	const int rightBoundary{ ofGetWidth() - 100 };
 	const int upperBoundary{ 100 };
@@ -76,6 +80,7 @@ private:
 
 	void drawInstruction() const;
 	void drawStartButton() const;
+	void drawEndScreen() const;
 	void cleanUpProjectiles();
 	void manageAlienCollisions();
 	void manageHeroCollisions();

@@ -24,6 +24,10 @@ void ofApp::setup(){
 	startFont.setLineHeight(lineHeight);
 	startFont.setLetterSpacing(letterSpacing);
 	startButton = ofRectangle(ofGetWidth() / 2, ofGetHeight() / 2 + 200, 200, 65);
+	// game result font
+	gameResult.load("Blanka-Regular.ttf", 75, true, true);
+	gameResult.setLineHeight(lineHeight);
+	gameResult.setLetterSpacing(letterSpacing);
 }
 
 //--------------------------------------------------------------
@@ -49,7 +53,7 @@ void ofApp::draw() {
 	ofDrawLine(offsetX, lowerBoundary, ofGetWidth() - offsetX, lowerBoundary);
 
 	// draw game title; align game title to the centre
-	ofRectangle titleBounds = title.getStringBoundingBox(titleStr, 0, 0);
+	const ofRectangle titleBounds = title.getStringBoundingBox(titleStr, 0, 0);
 	const float titlePosX = ofGetWidth() / 2 - titleBounds.width / 2;
 	const float titlePosY = upperBoundary / 2 + titleBounds.height / 2;
 	title.drawString(titleStr, titlePosX, titlePosY);
@@ -82,10 +86,12 @@ void ofApp::draw() {
 		case GameState::won: 
 			// draw player
 			player.drawPlayer();
+			drawEndScreen();
 			break;
 		case GameState::lost: 
 			// draw alien swarm
 			alienSwarm.draw();
+			drawEndScreen();
 			break;
 	}
 }
@@ -173,18 +179,18 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 void ofApp::drawInstruction() const {
 	const ofRectangle instrBounds = instructions.getStringBoundingBox(instructionsStr, ofGetWidth() / 2, ofGetHeight() / 2);
-	const float instrPositionX = ofGetWidth() / 2 - instrBounds.width / 2;
-	const float instrPositionY = ofGetHeight() / 2 - instrBounds.height / 2;
+	const float instrPosX = ofGetWidth() / 2 - instrBounds.width / 2;
+	const float instrPosY = ofGetHeight() / 2 - instrBounds.height / 2;
 	ofSetColor(255);
 	// draw a border around the instructions
 	ofDrawRectangle(instrBounds.x, instrBounds.y, ofGetWidth() - 60, instrBounds.height * 1.1);
 	ofSetColor(10);
-	instructions.drawString(instructionsStr, instrPositionX, instrPositionY);
+	instructions.drawString(instructionsStr, instrPosX, instrPosY);
 	const ofRectangle instrTitleBounds = instructionsTitle.getStringBoundingBox(instructionsTitleStr, 0, 0);
-	const float instrTitlePositionX = ofGetWidth() / 2 - instrTitleBounds.width / 2;
-	const float instrTitlePositionY = (instrPositionY + upperBoundary) / 2;
+	const float instrTitlePosX = ofGetWidth() / 2 - instrTitleBounds.width / 2;
+	const float instrTitlePosY = (instrPosY + upperBoundary) / 2;
 	ofSetColor(255);
-	instructionsTitle.drawString(instructionsTitleStr, instrTitlePositionX, instrTitlePositionY);
+	instructionsTitle.drawString(instructionsTitleStr, instrTitlePosX, instrTitlePosY);
 }
 
 void ofApp::drawStartButton() const {
@@ -195,6 +201,23 @@ void ofApp::drawStartButton() const {
 	ofDrawRectangle(startButton);
 	ofSetColor(10);
 	startFont.drawString(startStr, startStrPosX, startStrPosY);
+}
+
+void ofApp::drawEndScreen() const {
+	std::string resultStr;
+	if(gameState == GameState::lost) {
+		resultStr = gameOverStr;
+	}
+	else if (gameState == GameState::won) {
+		resultStr = victoryStr;
+	}
+	const ofRectangle resultBounds = instructions.getStringBoundingBox(resultStr, ofGetWidth() / 2, ofGetHeight() / 2);
+	const float resultBoundsPosX = ofGetWidth() / 2 - resultBounds.width / 2;
+	const float resultBoundsPosY = ofGetHeight() / 2 + resultBounds.height;
+	ofSetColor(255);
+	ofDrawRectangle(resultBounds.x, resultBounds.y, ofGetWidth() - 60, lowerBoundary - upperBoundary);
+	ofSetColor(10);
+	gameResult.drawString(resultStr, resultBoundsPosX, resultBoundsPosY);
 }
 
 void ofApp::cleanUpProjectiles() {
