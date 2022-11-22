@@ -13,7 +13,7 @@ private:
 	Coordinate mySpeed;
 	std::vector<Projectile> myProjectiles;
 	std::vector<std::vector<Alien>> mySwarm;
-	int myLivingAliensCount;
+	int myLivingAliensCount = 0;
 public:
 	AlienSwarm(const int& row, const int& column, const int& gridSize, const int& leftBoundary, const int& rightBoundary, const Coordinate& initialSpeed, const std::vector<Projectile>& projectiles);
 
