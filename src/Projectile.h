@@ -16,6 +16,7 @@ public:
 	Projectile(const Coordinate& coordinate, const Type& type);
 
 	void draw();
+
 	void update();
 	void update(const Coordinate coord);
 

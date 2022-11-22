@@ -65,7 +65,7 @@ void AlienSwarm::destroyProjectile(int index) {
 }
 
 int AlienSwarm::getAlienScore(const int n, const int m) const {
-	return mySwarm[n][m].value();
+	return mySwarm[n][m].getValue();
 }
 
 size_t AlienSwarm::getNumProjectile() const {

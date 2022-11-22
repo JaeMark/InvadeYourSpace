@@ -19,15 +19,20 @@ public:
 
 	void draw() const;
 	void drawProjectiles();
+
 	void update();
+
 	void loadProjectile(const float& loadProbability);
 	void cleanUpProjectiles(const int boundary);
+
 	void destroyAlien(const int n, const int m);
 	void destroyProjectile(int index);
+
 	int getAlienScore(const int n, const int m) const;
 	size_t getNumProjectile() const;
 	ofRectangle getAlienCollision(const int n, const int m);
 	ofRectangle getProjectileCollision(const int index) const;
+
 	bool isDestroyed() const;
 	bool isAlienAlive(const int n, const int m) const;
 	bool hasReached(const int& boundary) const;

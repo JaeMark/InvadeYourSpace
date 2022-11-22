@@ -33,7 +33,12 @@ void Alien::update(Coordinate changeInCoordinate) {
 	}
 }
 
-int Alien::value() const {
+void Alien::destroy() {
+	isAlienAlive = false;
+	myDestructionAudio.play();
+}
+
+int Alien::getValue() const {
 	int alienValue = 0;
 	switch (myType) {
 	case Type::bottom:
@@ -49,18 +54,13 @@ int Alien::value() const {
 	return alienValue;
 }
 
-void Alien::destroy() {
-	isAlienAlive = false;
-	myDestructionAudio.play();
+Coordinate Alien::getWeaponCoordinate() const {
+	// weapon is located at the middle front of the ship
+	return Coordinate{ myCoordinate.x, myCoordinate.y + myAvatar.getHeight() / 2 };
 }
 
 bool Alien::isAlive() const {
 	return isAlienAlive;
-}
-
-Coordinate Alien::getWeaponCoordinate() const {
-	// weapon is located at the middle front of the ship
-	return Coordinate{ myCoordinate.x, myCoordinate.y + myAvatar.getHeight() / 2 };
 }
 
 bool Alien::isOnBoundary(double leftBoundary, double rightBoundary) const {

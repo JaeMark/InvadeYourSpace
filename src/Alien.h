@@ -20,10 +20,12 @@ public:
 
 	void draw() const;
 	void update(Coordinate changeInCoordinate);
-	int value() const;
 	void destroy();
-	bool isAlive() const;
+
+	int getValue() const;
 	Coordinate getWeaponCoordinate() const;
+
+	bool isAlive() const;
 	bool isOnBoundary(double leftBoundary, double rightBoundary) const;
 private:
 	void loadSprite();
