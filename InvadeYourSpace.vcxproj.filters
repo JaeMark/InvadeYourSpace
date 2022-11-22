@@ -16,9 +16,6 @@
     <ClCompile Include="src\Health.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Coordinate.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Score.cpp">
       <Filter>src</Filter>
     </ClCompile>

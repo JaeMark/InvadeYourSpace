@@ -25,6 +25,7 @@ public:
 	void destroyAlien(const int n, const int m);
 	void destroyProjectile(int index);
 	int getAlienScore(const int n, const int m) const;
+	size_t getNumProjectile() const;
 	ofRectangle getAlienCollision(const int n, const int m);
 	ofRectangle getProjectileCollision(const int index) const;
 	bool isDestroyed() const;

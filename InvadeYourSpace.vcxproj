@@ -183,7 +183,6 @@
   <ItemGroup>
     <ClCompile Include="src\Alien.cpp" />
     <ClCompile Include="src\AlienSwarm.cpp" />
-    <ClCompile Include="src\Coordinate.cpp" />
     <ClCompile Include="src\Health.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
