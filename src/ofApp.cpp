@@ -11,38 +11,38 @@ void ofApp::setup(){
 	title.load("Blanka-Regular.ttf", 50, true, true);
 	title.setLineHeight(lineHeight);
 	title.setLetterSpacing(letterSpacing);
-	// instructions title font
+	// setup instructions title font
 	instructionsTitle.load("Blanka-Regular.ttf", 50, true, true);
 	instructionsTitle.setLineHeight(lineHeight);
 	instructionsTitle.setLetterSpacing(letterSpacing);
-	// instructions font
+	// setup instructions font
 	instructions.load("Blanka-Regular.ttf", 20, true, true);
 	instructions.setLineHeight(lineHeight);
 	instructions.setLetterSpacing(letterSpacing);
-	// start button
+	// setup start button
 	startFont.load("Blanka-Regular.ttf", 30, true, true);
 	startFont.setLineHeight(lineHeight);
 	startFont.setLetterSpacing(letterSpacing);
 	startButton = ofRectangle(ofGetWidth() / 2, ofGetHeight() / 2 + 200, 200, 65);
-	// game result font
+	// setup game result font
 	gameResult.load("Blanka-Regular.ttf", 75, true, true);
 	gameResult.setLineHeight(lineHeight);
 	gameResult.setLetterSpacing(letterSpacing);
 
-	// game intro music
+	// setup game intro music
 	introAudio.load("Audio/introMusic.mp3");
 	introAudio.setVolume(0.75);
-	// game start audio
+	// setup game start audio
 	gameStartAudio.load("Audio/gameStartAudio.mp3");
 	gameStartAudio.setVolume(0.75);
-	// background music 
+	// setup background music 
 	backgroundAudio.load("Audio/backgroundMusic.mp3");
 	backgroundAudio.setVolume(0.75);
 	backgroundAudio.setLoop(true);
-	// victory audio
+	// setup victory audio
 	victoryAudio.load("Audio/victoryAudio.mp3");
 	victoryAudio.setVolume(0.75);
-	// game over audio
+	// setup game over audio
 	gameOverAudio.load("Audio/gameOverAudio.mp3");
 	gameOverAudio.setVolume(0.75);
 }
@@ -60,7 +60,7 @@ void ofApp::update() {
 	}
 	// update the sound playing system
 	ofSoundUpdate();
-	
+
 }
 
 //--------------------------------------------------------------
@@ -218,43 +218,53 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 void ofApp::drawInstruction() const {
 	const ofRectangle instrBounds = instructions.getStringBoundingBox(instructionsStr, ofGetWidth() / 2, ofGetHeight() / 2);
+	// since the text is drawn from the bottom left corner, subtract an offset to center the text
 	const float instrPosX = ofGetWidth() / 2 - instrBounds.width / 2;
 	const float instrPosY = ofGetHeight() / 2 - instrBounds.height / 2;
-	ofSetColor(255);
 	// draw a border around the instructions
+	ofSetColor(255);
 	ofDrawRectangle(instrBounds.x, instrBounds.y, ofGetWidth() - 60, instrBounds.height * 1.1);
+	// draw instructions text
 	ofSetColor(10);
 	instructions.drawString(instructionsStr, instrPosX, instrPosY);
+
 	const ofRectangle instrTitleBounds = instructionsTitle.getStringBoundingBox(instructionsTitleStr, 0, 0);
+	// align text to the center
 	const float instrTitlePosX = ofGetWidth() / 2 - instrTitleBounds.width / 2;
 	const float instrTitlePosY = (instrPosY + upperBoundary) / 2;
+	// draw instruction title text
 	ofSetColor(255);
 	instructionsTitle.drawString(instructionsTitleStr, instrTitlePosX, instrTitlePosY);
 }
 
 void ofApp::drawStartButton() const {
 	ofRectangle startBounds = startFont.getStringBoundingBox(startStr, 0, 0);
+	// align text to the center
 	const float startStrPosX = startButton.x - startBounds.width / 2;
 	const float startStrPosY = startButton.y + startBounds.height / 2;
+	// draw button
 	ofSetColor(startButtonColor);
 	ofDrawRectangle(startButton);
+	// draw button text
 	ofSetColor(10);
 	startFont.drawString(startStr, startStrPosX, startStrPosY);
 }
 
 void ofApp::drawEndScreen() const {
-	std::string resultStr;
+	std::string outcomeStr;
 	if(gameState == GameState::lost) {
-		resultStr = gameOverStr;
+		outcomeStr = gameOverStr;
 	}
 	else if (gameState == GameState::won) {
-		resultStr = victoryStr;
+		outcomeStr = victoryStr;
 	}
-	const ofRectangle resultBounds = instructions.getStringBoundingBox(resultStr, ofGetWidth() / 2, ofGetHeight() / 2);
+	const ofRectangle resultBounds = instructions.getStringBoundingBox(outcomeStr, ofGetWidth() / 2, ofGetHeight() / 2);
+	// align text to the center
 	const float resultBoundsPosX = ofGetWidth() / 2 - resultBounds.width * 1.75;
 	const float resultBoundsPosY = ofGetHeight() / 2 + resultBounds.height;
+	// draw game outcome text
 	ofSetColor(255);
-	gameResult.drawString(resultStr, resultBoundsPosX, resultBoundsPosY);
+	gameResult.drawString(outcomeStr, resultBoundsPosX, resultBoundsPosY);
 }
 
 void ofApp::cleanUpProjectiles() {

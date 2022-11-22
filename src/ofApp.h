@@ -43,8 +43,6 @@ private:
 		"VICTORY:\t  Destroy All Alien Ships.\n"
 		"GAME OVER: The Alien Swarm Has Reached the Player\n"
 		"\t\t\t\t\t\tThe Player Ship is Damaged 3 Times\n" };
-	const float lineHeight{ 34.0 };
-	const float letterSpacing{ 1.035 };
 
 	ofTrueTypeFont startFont;
 	ofRectangle startButton;
@@ -55,6 +53,9 @@ private:
 	ofTrueTypeFont gameResult;
 	const std::string victoryStr{ "Mission Complete!" };
 	const std::string gameOverStr{ "Mission Failed!" };
+
+	const float lineHeight{ 34.0 };
+	const float letterSpacing{ 1.035 };
 
 	ofSoundPlayer introAudio;
 	ofSoundPlayer gameStartAudio;
@@ -69,12 +70,13 @@ private:
 	const int upperBoundary{ 100 };
 	const int lowerBoundary{ ofGetHeight() - 100 };
 
+
+	std::string playerAvatarStr{ "Assets/playerShip.png" };
 	const double heroCoordinateY{ lowerBoundary - 50.0 };
 	Coordinate heroCoordinate{ static_cast<double>(ofGetWidth() / 2), heroCoordinateY };
-	Score heroScore{ 0 , Coordinate{30, (static_cast<double>(ofGetHeight()) + lowerBoundary) / 2}};
 	Health heroHealth{ 3, Coordinate{static_cast<double>(ofGetWidth()) - 210, (static_cast<double>(ofGetHeight()) + lowerBoundary) / 2} };
+	Score heroScore{ 0 , Coordinate{30, (static_cast<double>(ofGetHeight()) + lowerBoundary) / 2}};
 	std::vector<Projectile> heroProjectiles;
-	std::string playerAvatarStr{ "Assets/playerShip.png" };
 	Player player{ Player{ playerAvatarStr, heroCoordinate, heroHealth, heroScore, heroProjectiles}};
 	const int heroMovementSpeed{ 20 };
 
