@@ -9,19 +9,8 @@ class Score {
 	ofTrueTypeFont	myFont;
 	const Coordinate myPosition;
 public:
-	Score(const int& score, const Coordinate& position)
-		: myScore{ score }, myPosition { position } {
-		myFont.load("Blanka-Regular.ttf", 30, true, true);
-		myFont.setLineHeight(34.0f);
-		myFont.setLetterSpacing(1.035);
-	}
+	Score(const int& score, const Coordinate& position);
 
-	void draw() const {
-		ofSetColor(225);
-		myFont.drawString("PLAYER SCORE: " + ofToString(myScore), myPosition.x, myPosition.y + myFont.getLineHeight() / 2);
-	}
-
-	void update(int score) {
-		myScore += score;
-	}
+	void draw() const;
+	void update(const int score);
 };
