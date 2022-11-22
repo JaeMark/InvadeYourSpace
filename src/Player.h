@@ -97,6 +97,7 @@ public:
 		myCoordinate.x = ofClamp(myCoordinate.x, leftBoundary, rightBoundary);
 		if (ofGetRectMode() == OF_RECTMODE_CENTER) {
 			// ofRectangle intersect() doesn't seem to work with OF_RECTMODE_CENTER
+			// offset collision coordinates by half the avatar's width and height
 			myCollision.setX(myCoordinate.x - myAvatar.getWidth() / 2);
 			myCollision.setY(myCoordinate.y - myAvatar.getHeight() / 2);
 		} else {
