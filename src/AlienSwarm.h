@@ -13,172 +13,27 @@ private:
 	Coordinate mySpeed;
 	std::vector<Projectile> myProjectiles;
 	std::vector<std::vector<Alien>> mySwarm;
-	int numLivingAliens;
+	int myLivingAliensCount;
 public:
-	AlienSwarm(const int& row, const int& column, const int& gridSize, const int& leftBoundary, const int& rightBoundary, const Coordinate& initialSpeed, const std::vector<Projectile>& projectiles)
-		: myRow{ row }, myColumn{ column }, myGridSize{ gridSize }, myLeftBoundary{ leftBoundary }, myRightBoundary{ rightBoundary }, mySpeed{ initialSpeed }, myProjectiles { projectiles } {
-		initializeSwarm();
-		numLivingAliens = myRow * myColumn;
-	}
+	AlienSwarm(const int& row, const int& column, const int& gridSize, const int& leftBoundary, const int& rightBoundary, const Coordinate& initialSpeed, const std::vector<Projectile>& projectiles);
 
-	void draw() const {
-		for (auto& aliens : mySwarm) {
-			for (auto& alien : aliens) {
-				if (alien.isAlive()) {
-					alien.draw();
-				}
-			}
-		}
-	}
-
-	void update() {
-		const Coordinate newSpeed = getNewSwarmSpeed();
-		for (auto& aliens : mySwarm) {
-			for (auto& alien : aliens) {
-				alien.update(newSpeed);
-			}
-		}
-	}
-
-	
-
-	void destroyAlien(const int n, const int m) {
-		mySwarm[n][m].destroy();
-		--numLivingAliens;
-		// speed up every 5 aliens destroyed
-		if(numLivingAliens % 5 == 0) speedUp();
-	}
-
-	bool isDestroyed() const {
-		return numLivingAliens == 0;
-	}
-
-	bool isAlienAlive(const int n, const int m) const {
-		return mySwarm[n][m].isAlive();
-	}
-
-	ofRectangle getAlienCollision(const int n, const int m) {
-		return mySwarm[n][m].collision;
-	}
-
-	int getAlienScore(const int n, const int m) const {
-		return mySwarm[n][m].value();
-	}
-
-
-	// Projectiles
-	void drawProjectiles() {
-		for (auto& projectile : myProjectiles) {
-			projectile.draw();
-		}
-	}
-
-	void loadProjectile(const float& loadProbability) {
-		const float randomNumber = ofRandomuf(); // random number from 0-1;
-		if (randomNumber < loadProbability) {
-			const Coordinate alienCoordinate = getAvailableAlienCoordinate();
-			myProjectiles.emplace_back(Projectile{ alienCoordinate, Projectile::Type::enemy });
-		}
-	}
-
-	void destroyProjectile(int index) {
-		myProjectiles.erase(myProjectiles.begin() + index);
-
-	}
-
-	size_t getNumProjectile() const {
-		return myProjectiles.size();
-	}
-
-	ofRectangle getProjectileCollision(const int index) const {
-		return myProjectiles[index].collision;
-	}
-
-	void cleanUpProjectiles(const int boundary) {
-		// clean up all projectiles that has reached the given boundary
-		for (int i{ 0 }; i < myProjectiles.size(); i++) {
-			// find lower edge of the projectile collision
-			// myProjectiles[i].collision.getPosition().y will give the y value of the upper left corner of the collision
-			// so add the height of the collision to find the lower edge y value
-			const int lowerEdge = myProjectiles[i].collision.getPosition().y + myProjectiles[i].collision.getHeight();
-			if (lowerEdge > boundary) {
-				destroyProjectile(i);
-			}
-		}
-	}
-
-	bool hasReached(const int& boundary) const {
-		for (auto& aliens : mySwarm) {
-			for (auto& alien : aliens) {
-				if (alien.isAlive() && alien.getWeaponCoordinate().y > boundary) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+	void draw() const;
+	void drawProjectiles();
+	void update();
+	void loadProjectile(const float& loadProbability);
+	void cleanUpProjectiles(const int boundary);
+	void destroyAlien(const int n, const int m);
+	void destroyProjectile(int index);
+	int getAlienScore(const int n, const int m) const;
+	ofRectangle getAlienCollision(const int n, const int m);
+	ofRectangle getProjectileCollision(const int index) const;
+	bool isDestroyed() const;
+	bool isAlienAlive(const int n, const int m) const;
+	bool hasReached(const int& boundary) const;
 
 private:
-	void initializeSwarm() {
-		// create alien matrix
-		double alienPosX = 0;
-		double alienPosY = 0;
-		const double gridInitialPosX = ofGetWidth() / 2 - myGridSize * myRow;
-		const double gridInitialPosY = 150;
-		Alien::Type alienType;
-		for (int n{ 0 }; n < myRow; n++) {
-			std::vector<Alien> aliens;
-			alienPosY = myGridSize * n + gridInitialPosY;
-			// determine alien type
-			if (n == 0) {
-				alienType = Alien::Type::top;
-			}
-			else if (n == 1 || n == 2) {
-				alienType = Alien::Type::middle;
-			}
-			else if (n == 3 || n == 4) {
-				alienType = Alien::Type::bottom;
-			}
-			for (int m{ 0 }; m < myColumn; m++) {
-				alienPosX = myGridSize * m + gridInitialPosX;
-				Coordinate alienCoord{ Coordinate{ alienPosX, alienPosY } };
-				aliens.emplace_back(Alien{ alienCoord , alienType });
-			}
-			mySwarm.push_back(aliens);
-		}
-	}
-
-	Coordinate getNewSwarmSpeed() {
-		for (auto& aliens : mySwarm) {
-			for (auto& alien : aliens) {
-				if (alien.isOnBoundary(myLeftBoundary, myRightBoundary)) {
-					// change alien swarm velocity
-					mySpeed.x *= -1;
-					return Coordinate{mySpeed.x, mySpeed.y };
-				}
-			}
-		}
-		// no change in velocity direction
-		return Coordinate{ mySpeed.x, 0 };
-	}
-
-	Coordinate getAvailableAlienCoordinate() const {
-		std::vector<Alien> aliveAliens;
-		for (auto& aliens : mySwarm) {
-			for (auto& alien : aliens) {
-				if(alien.isAlive()) {
-					aliveAliens.push_back(alien);
-				}
-			}
-		}
-		// return random alive alien
-		return aliveAliens[ofRandom(0, aliveAliens.size())].getWeaponCoordinate();
-	}
-
-	void speedUp() {
-		// speed up horizontally by 25%
-		mySpeed.x *= 1.25;
-		// speed up vertically by 10%
-		mySpeed.y *= 1.1;
-	}
+	void initializeSwarm();
+	Coordinate getNewSwarmSpeed();
+	Coordinate getAvailableAlienCoordinate() const;
+	void speedUp();
 };
