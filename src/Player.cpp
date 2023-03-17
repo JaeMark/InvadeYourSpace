@@ -51,8 +51,11 @@ void Player::updateScore(const int deltaScore) {
 
 void Player::addProjectile() {
 	// weapon is located at the middle front of the ship
-	const Coordinate weaponCoordinate{ myCoordinate.x, myCoordinate.y - myAvatar.getHeight() / 2 };
-	myProjectiles.emplace_back(Projectile{ weaponCoordinate, Projectile::Type::friendly });
+	// limit to 1 projectile at a time
+	if (myProjectiles.size() == 0) {
+		const Coordinate weaponCoordinate{ myCoordinate.x, myCoordinate.y - myAvatar.getHeight() / 2 };
+		myProjectiles.emplace_back(Projectile{ weaponCoordinate, Projectile::Type::friendly });
+	}
 }
 
 void Player::destroyProjectile(int index) {

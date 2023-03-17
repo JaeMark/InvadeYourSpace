@@ -40,12 +40,12 @@ void Projectile::update(const Coordinate coord) {
 void Projectile::setSprite() {
 	if (myType == Type::friendly) {
 		myAvatar.load("Assets/playerProjectile.png");
-		mySpeed = -5;
+		mySpeed = -25;
 		myAvatar.rotate90(3);
 	}
 	else if (myType == Type::enemy) {
 		myAvatar.load("Assets/enemyProjectile.png");
-		mySpeed = 2;
+		mySpeed = 5;
 		myAvatar.rotate90(1);
 	}
 	myAvatar.resize(20, 40);
