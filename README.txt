@@ -2,7 +2,7 @@ COMP 3015: Project 1
 Invade Your Space
 by Jetro De Leon
 
-Project Optional Features:
+Project Optional Features Included:
 · You’ve designed your game using at least three different user defined types
 · You’ve added at least two sound effects to the game tied to specific gameplay situations.
 · You’ve got music playing on a loop in the background of your game.
@@ -12,3 +12,6 @@ Project Optional Features:
 
 Github repo:
 https://github.com/jdeleon5/InvadeYourSpace.git
+
+Itch.io Page
+https://jaemark.itch.io/invade-your-space
